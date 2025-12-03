@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chicago Police District Abstract Crime Map</title>
+
+    <!-- D3 -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- WKT → GeoJSON -->
+    <script src="https://unpkg.com/wellknown@0.5.0/wellknown.js"></script>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        #map-chart {
+            width: 800px;
+            height: 800px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        #monthSelector {
+            margin-bottom: 15px;
+            padding: 6px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Chicago Police District Crime Map</h2>
+
+    <select id="monthSelector"></select>
+
+    <div id="map-chart"></div>
+
+    <script>
+
+        // =======================================================
+        // 1. Load CSV (police districts)
+        // =======================================================
+        d3.csv("PoliceDistrictDec2012_20251203.csv").then(csvData => {
+
+            // Convert CSV rows → GeoJSON features
+            const features = csvData.map(row => ({
+                type: "Feature",
+                properties: {
+                    dist_num: +row.DIST_NUM,
+                    dist_label: row.DIST_LABEL
+                },
+                geometry: wellknown.parse(row.the_geom)
+            }));
+
+            const geojsonData = {
+                type: "FeatureCollection",
+                features: features
+            };
+
+            // =======================================================
+            // 2. Load crime data JSON (you must provide file or variable)
+            // =======================================================
+            d3.json("data_2014_2024/map_pie_data_monthly.json").then(mapData => {
+
+                // Call the main map-drawing function
+                createD3CrimeMap(mapData, geojsonData);
+
+            });
+        });
+
+
+        // =======================================================
+        // 3. Your createD3CrimeMap() function (modified for CSV GeoJSON)
+        // =======================================================
+        async function createD3CrimeMap(mapData, geojsonData) {
+
+            // 1. Parse month list
+            const months = Object.keys(mapData.monthly_data).sort();
+            const monthSelector = document.getElementById("monthSelector");
+
+            // Fill dropdown
+            months.forEach(m => {
+                const opt = document.createElement("option");
+                opt.value = m;
+                opt.textContent = m;
+                monthSelector.appendChild(opt);
+            });
+
+            let currentMonth = months[0];
+
+            // SVG setup
+            const width = 800;
+            const height = 800;
+
+            const container = d3.select("#map-chart");
+            container.selectAll("*").remove();
+
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            // ---- Abstract projection (same as your CSV version) ----
+            const projection = d3.geoIdentity()
+                .reflectY(true)
+                .fitSize([width, height], geojsonData);
+
+            const path = d3.geoPath(projection);
+
+            // ----- Color scale -----
+            const colorScale = d3.scaleSequential(d3.interpolateOrRd);
+
+            // Tooltip
+            const tooltip = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .style("padding", "6px 10px")
+                .style("background", "white")
+                .style("border", "1px solid #ccc")
+                .style("border-radius", "5px")
+                .style("pointer-events", "none")
+                .style("opacity", 0);
+
+            function updateMap(month) {
+                currentMonth = month;
+
+                const monthData = mapData.monthly_data[month];
+
+                // district → crime count
+                const crimeByDist = {};
+                monthData.forEach(d => {
+                    crimeByDist[d.District] = d.total_crimes;
+                });
+
+                const values = Object.values(crimeByDist);
+                const maxCrime = d3.max(values);
+                colorScale.domain([0, maxCrime]);
+
+                // Draw polygons
+                svg.selectAll("path")
+                    .data(geojsonData.features)
+                    .join("path")
+                    .attr("d", d => path(d))
+                    .attr("stroke", "#333")
+                    .attr("stroke-width", 0.5)
+                    .attr("fill", d => {
+                        const dist = d.properties.dist_num;
+                        const crime = crimeByDist[dist] || 0;
+                        return colorScale(crime);
+                    })
+                    .on("mouseover", function(event, d) {
+                        const dist = d.properties.dist_num;
+                        const crime = crimeByDist[dist] || 0;
+                        tooltip.style("opacity", 1)
+                            .html(`<b>District ${dist}</b><br>Crimes: ${crime}<br>Month: ${currentMonth}`);
+                        d3.select(this).attr("stroke-width", 2);
+                    })
+                    .on("mousemove", function(event) {
+                        tooltip.style("left", (event.pageX + 10) + "px")
+                            .style("top", (event.pageY - 20) + "px");
+                    })
+                    .on("mouseout", () => {
+                        tooltip.style("opacity", 0);
+                        d3.select(event.target).attr("stroke-width", 0.5);
+                    });
+
+            }
+
+            // First draw
+            updateMap(currentMonth);
+
+            // On dropdown change
+            monthSelector.addEventListener("change", e => {
+                updateMap(e.target.value);
+            });
+        }
+
+    </script>
+
+</body>
+</html>
