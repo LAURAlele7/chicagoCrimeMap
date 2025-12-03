@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chicago Police District Abstract Map</title>
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- 用来把 WKT (MULTIPOLYGON...) 解析成 GeoJSON 的库 -->
+  <script src="https://unpkg.com/wellknown@0.5.0/wellknown.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f5f5f5;
+      font-family: sans-serif;
+    }
+    #map {
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    const width = 800;
+    const height = 800;
+
+    const svg = d3.select("#map")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    // 颜色方案：离散颜色，每个 district 一个颜色
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // 读 CSV 文件（文件名必须是 PoliceDistrictDec2012_20251203.csv）
+    d3.csv("PoliceDistrictDec2012_20251203.csv").then(data => {
+      // 把 CSV 每一行转成 GeoJSON Feature
+      const features = data.map((d, i) => {
+        // d.the_geom 里是 "MULTIPOLYGON (...)" 这样的 WKT
+        const geom = wellknown.parse(d.the_geom);
+
+        return {
+          type: "Feature",
+          properties: {
+            DIST_LABEL: d.DIST_LABEL,
+            DIST_NUM: d.DIST_NUM
+          },
+          geometry: geom
+        };
+      });
+
+      const geojson = {
+        type: "FeatureCollection",
+        features: features
+      };
+
+      // 用 geoIdentity 做“抽象投影”，不加载底图
+      const projection = d3.geoIdentity()
+        .reflectY(true) // Y 轴翻转，让图像更直观
+        .fitSize([width, height], geojson);
+
+      const path = d3.geoPath(projection);
+
+      // 画多边形
+      svg.selectAll("path")
+        .data(features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("fill", (d, i) => color(i))
+        .attr("stroke", "#333")
+        .attr("stroke-width", 0.5)
+        .append("title")   // 鼠标悬停显示区号
+        .text(d => `${d.properties.DIST_LABEL} (District ${d.properties.DIST_NUM})`);
+
+      // （可选）在每个 district 的质心标记文字
+      svg.selectAll("text")
+        .data(features)
+        .enter()
+        .append("text")
+        .attr("x", d => path.centroid(d)[0])
+        .attr("y", d => path.centroid(d)[1])
+        .attr("text-anchor", "middle")
+        .attr("dy", "0.35em")
+        .style("font-size", "10px")
+        .style("fill", "white")
+        .style("pointer-events", "none")
+        .text(d => d.properties.DIST_NUM);
+    }).catch(err => {
+      console.error("Error loading CSV:", err);
+    });
+  </script>
+</body>
+</html>
