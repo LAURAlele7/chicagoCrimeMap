@@ -171,9 +171,9 @@
                 monthSlider.min = 1;
                 monthSlider.max = 12;
                 monthSlider.step = 1;
-                monthSlider.value = months[0];
+                // monthSlider.value = months[0];
 
-                monthLabel.textContent = monthSlider.value.padStart(2, "0");
+                monthLabel.textContent = monthSlider.value; //.padStart(2, "0");
             }
             let currentYear = +yearSlider.value;
             refreshMonthSlider(currentYear);
