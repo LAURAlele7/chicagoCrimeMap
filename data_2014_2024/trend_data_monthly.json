@@ -1,0 +1,2514 @@
+{
+  "monthly_totals": [
+    {
+      "Month_Year": "2014-01",
+      "total_crimes": 2428
+    },
+    {
+      "Month_Year": "2014-02",
+      "total_crimes": 2501
+    },
+    {
+      "Month_Year": "2014-03",
+      "total_crimes": 2862
+    },
+    {
+      "Month_Year": "2014-04",
+      "total_crimes": 2893
+    },
+    {
+      "Month_Year": "2014-05",
+      "total_crimes": 2983
+    },
+    {
+      "Month_Year": "2014-06",
+      "total_crimes": 2767
+    },
+    {
+      "Month_Year": "2014-07",
+      "total_crimes": 3095
+    },
+    {
+      "Month_Year": "2014-08",
+      "total_crimes": 2894
+    },
+    {
+      "Month_Year": "2014-09",
+      "total_crimes": 2627
+    },
+    {
+      "Month_Year": "2014-10",
+      "total_crimes": 2630
+    },
+    {
+      "Month_Year": "2014-11",
+      "total_crimes": 2340
+    },
+    {
+      "Month_Year": "2014-12",
+      "total_crimes": 2054
+    },
+    {
+      "Month_Year": "2015-01",
+      "total_crimes": 2508
+    },
+    {
+      "Month_Year": "2015-02",
+      "total_crimes": 2075
+    },
+    {
+      "Month_Year": "2015-03",
+      "total_crimes": 2678
+    },
+    {
+      "Month_Year": "2015-04",
+      "total_crimes": 2154
+    },
+    {
+      "Month_Year": "2015-05",
+      "total_crimes": 2047
+    },
+    {
+      "Month_Year": "2015-06",
+      "total_crimes": 1938
+    },
+    {
+      "Month_Year": "2015-07",
+      "total_crimes": 2072
+    },
+    {
+      "Month_Year": "2015-08",
+      "total_crimes": 2171
+    },
+    {
+      "Month_Year": "2015-09",
+      "total_crimes": 2102
+    },
+    {
+      "Month_Year": "2015-10",
+      "total_crimes": 2117
+    },
+    {
+      "Month_Year": "2015-11",
+      "total_crimes": 1851
+    },
+    {
+      "Month_Year": "2015-12",
+      "total_crimes": 1305
+    },
+    {
+      "Month_Year": "2016-01",
+      "total_crimes": 1341
+    },
+    {
+      "Month_Year": "2016-02",
+      "total_crimes": 1513
+    },
+    {
+      "Month_Year": "2016-03",
+      "total_crimes": 1766
+    },
+    {
+      "Month_Year": "2016-04",
+      "total_crimes": 1734
+    },
+    {
+      "Month_Year": "2016-05",
+      "total_crimes": 1744
+    },
+    {
+      "Month_Year": "2016-06",
+      "total_crimes": 1626
+    },
+    {
+      "Month_Year": "2016-07",
+      "total_crimes": 1557
+    },
+    {
+      "Month_Year": "2016-08",
+      "total_crimes": 1189
+    },
+    {
+      "Month_Year": "2016-09",
+      "total_crimes": 1230
+    },
+    {
+      "Month_Year": "2016-10",
+      "total_crimes": 1062
+    },
+    {
+      "Month_Year": "2016-11",
+      "total_crimes": 1072
+    },
+    {
+      "Month_Year": "2016-12",
+      "total_crimes": 968
+    },
+    {
+      "Month_Year": "2017-01",
+      "total_crimes": 1329
+    },
+    {
+      "Month_Year": "2017-02",
+      "total_crimes": 1301
+    },
+    {
+      "Month_Year": "2017-03",
+      "total_crimes": 1442
+    },
+    {
+      "Month_Year": "2017-04",
+      "total_crimes": 1469
+    },
+    {
+      "Month_Year": "2017-05",
+      "total_crimes": 1520
+    },
+    {
+      "Month_Year": "2017-06",
+      "total_crimes": 1317
+    },
+    {
+      "Month_Year": "2017-07",
+      "total_crimes": 1535
+    },
+    {
+      "Month_Year": "2017-08",
+      "total_crimes": 1463
+    },
+    {
+      "Month_Year": "2017-09",
+      "total_crimes": 1453
+    },
+    {
+      "Month_Year": "2017-10",
+      "total_crimes": 1225
+    },
+    {
+      "Month_Year": "2017-11",
+      "total_crimes": 1213
+    },
+    {
+      "Month_Year": "2017-12",
+      "total_crimes": 1053
+    },
+    {
+      "Month_Year": "2018-01",
+      "total_crimes": 1497
+    },
+    {
+      "Month_Year": "2018-02",
+      "total_crimes": 1319
+    },
+    {
+      "Month_Year": "2018-03",
+      "total_crimes": 1678
+    },
+    {
+      "Month_Year": "2018-04",
+      "total_crimes": 1513
+    },
+    {
+      "Month_Year": "2018-05",
+      "total_crimes": 1719
+    },
+    {
+      "Month_Year": "2018-06",
+      "total_crimes": 1585
+    },
+    {
+      "Month_Year": "2018-07",
+      "total_crimes": 1661
+    },
+    {
+      "Month_Year": "2018-08",
+      "total_crimes": 1669
+    },
+    {
+      "Month_Year": "2018-09",
+      "total_crimes": 1510
+    },
+    {
+      "Month_Year": "2018-10",
+      "total_crimes": 1422
+    },
+    {
+      "Month_Year": "2018-11",
+      "total_crimes": 1519
+    },
+    {
+      "Month_Year": "2018-12",
+      "total_crimes": 1411
+    },
+    {
+      "Month_Year": "2019-01",
+      "total_crimes": 1829
+    },
+    {
+      "Month_Year": "2019-02",
+      "total_crimes": 1685
+    },
+    {
+      "Month_Year": "2019-03",
+      "total_crimes": 1954
+    },
+    {
+      "Month_Year": "2019-04",
+      "total_crimes": 1862
+    },
+    {
+      "Month_Year": "2019-05",
+      "total_crimes": 1880
+    },
+    {
+      "Month_Year": "2019-06",
+      "total_crimes": 1845
+    },
+    {
+      "Month_Year": "2019-07",
+      "total_crimes": 2026
+    },
+    {
+      "Month_Year": "2019-08",
+      "total_crimes": 2163
+    },
+    {
+      "Month_Year": "2019-09",
+      "total_crimes": 1819
+    },
+    {
+      "Month_Year": "2019-10",
+      "total_crimes": 1719
+    },
+    {
+      "Month_Year": "2019-11",
+      "total_crimes": 1618
+    },
+    {
+      "Month_Year": "2019-12",
+      "total_crimes": 1619
+    },
+    {
+      "Month_Year": "2020-01",
+      "total_crimes": 1864
+    },
+    {
+      "Month_Year": "2020-02",
+      "total_crimes": 1726
+    },
+    {
+      "Month_Year": "2020-03",
+      "total_crimes": 1307
+    },
+    {
+      "Month_Year": "2020-04",
+      "total_crimes": 709
+    },
+    {
+      "Month_Year": "2020-05",
+      "total_crimes": 1357
+    },
+    {
+      "Month_Year": "2020-06",
+      "total_crimes": 1213
+    },
+    {
+      "Month_Year": "2020-07",
+      "total_crimes": 1387
+    },
+    {
+      "Month_Year": "2020-08",
+      "total_crimes": 1590
+    },
+    {
+      "Month_Year": "2020-09",
+      "total_crimes": 1430
+    },
+    {
+      "Month_Year": "2020-10",
+      "total_crimes": 1498
+    },
+    {
+      "Month_Year": "2020-11",
+      "total_crimes": 1347
+    },
+    {
+      "Month_Year": "2020-12",
+      "total_crimes": 1320
+    },
+    {
+      "Month_Year": "2021-01",
+      "total_crimes": 1273
+    },
+    {
+      "Month_Year": "2021-02",
+      "total_crimes": 1061
+    },
+    {
+      "Month_Year": "2021-03",
+      "total_crimes": 1467
+    },
+    {
+      "Month_Year": "2021-04",
+      "total_crimes": 1272
+    },
+    {
+      "Month_Year": "2021-05",
+      "total_crimes": 1399
+    },
+    {
+      "Month_Year": "2021-06",
+      "total_crimes": 1377
+    },
+    {
+      "Month_Year": "2021-07",
+      "total_crimes": 1196
+    },
+    {
+      "Month_Year": "2021-08",
+      "total_crimes": 1121
+    },
+    {
+      "Month_Year": "2021-09",
+      "total_crimes": 1149
+    },
+    {
+      "Month_Year": "2021-10",
+      "total_crimes": 1133
+    },
+    {
+      "Month_Year": "2021-11",
+      "total_crimes": 1056
+    },
+    {
+      "Month_Year": "2021-12",
+      "total_crimes": 935
+    },
+    {
+      "Month_Year": "2022-01",
+      "total_crimes": 872
+    },
+    {
+      "Month_Year": "2022-02",
+      "total_crimes": 1133
+    },
+    {
+      "Month_Year": "2022-03",
+      "total_crimes": 1232
+    },
+    {
+      "Month_Year": "2022-04",
+      "total_crimes": 1266
+    },
+    {
+      "Month_Year": "2022-05",
+      "total_crimes": 1446
+    },
+    {
+      "Month_Year": "2022-06",
+      "total_crimes": 1287
+    },
+    {
+      "Month_Year": "2022-07",
+      "total_crimes": 1314
+    },
+    {
+      "Month_Year": "2022-08",
+      "total_crimes": 1295
+    },
+    {
+      "Month_Year": "2022-09",
+      "total_crimes": 1201
+    },
+    {
+      "Month_Year": "2022-10",
+      "total_crimes": 1199
+    },
+    {
+      "Month_Year": "2022-11",
+      "total_crimes": 1022
+    },
+    {
+      "Month_Year": "2022-12",
+      "total_crimes": 967
+    },
+    {
+      "Month_Year": "2023-01",
+      "total_crimes": 1377
+    },
+    {
+      "Month_Year": "2023-02",
+      "total_crimes": 1277
+    },
+    {
+      "Month_Year": "2023-03",
+      "total_crimes": 1175
+    },
+    {
+      "Month_Year": "2023-04",
+      "total_crimes": 1148
+    },
+    {
+      "Month_Year": "2023-05",
+      "total_crimes": 1311
+    },
+    {
+      "Month_Year": "2023-06",
+      "total_crimes": 1332
+    },
+    {
+      "Month_Year": "2023-07",
+      "total_crimes": 1472
+    },
+    {
+      "Month_Year": "2023-08",
+      "total_crimes": 1430
+    },
+    {
+      "Month_Year": "2023-09",
+      "total_crimes": 1270
+    },
+    {
+      "Month_Year": "2023-10",
+      "total_crimes": 1275
+    },
+    {
+      "Month_Year": "2023-11",
+      "total_crimes": 1290
+    },
+    {
+      "Month_Year": "2023-12",
+      "total_crimes": 1067
+    },
+    {
+      "Month_Year": "2024-01",
+      "total_crimes": 1271
+    },
+    {
+      "Month_Year": "2024-02",
+      "total_crimes": 1324
+    },
+    {
+      "Month_Year": "2024-03",
+      "total_crimes": 1321
+    },
+    {
+      "Month_Year": "2024-04",
+      "total_crimes": 1218
+    },
+    {
+      "Month_Year": "2024-05",
+      "total_crimes": 1215
+    },
+    {
+      "Month_Year": "2024-06",
+      "total_crimes": 1351
+    },
+    {
+      "Month_Year": "2024-07",
+      "total_crimes": 1570
+    },
+    {
+      "Month_Year": "2024-08",
+      "total_crimes": 1379
+    },
+    {
+      "Month_Year": "2024-09",
+      "total_crimes": 1288
+    },
+    {
+      "Month_Year": "2024-10",
+      "total_crimes": 1181
+    },
+    {
+      "Month_Year": "2024-11",
+      "total_crimes": 1099
+    },
+    {
+      "Month_Year": "2024-12",
+      "total_crimes": 1140
+    }
+  ],
+  "crime_type_trends": [
+    {
+      "Month_Year": "2014-01",
+      "count": 201,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-02",
+      "count": 146,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-03",
+      "count": 224,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-04",
+      "count": 273,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-05",
+      "count": 354,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-06",
+      "count": 327,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-07",
+      "count": 340,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-08",
+      "count": 273,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-09",
+      "count": 265,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-10",
+      "count": 265,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-11",
+      "count": 223,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-12",
+      "count": 218,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-01",
+      "count": 251,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-02",
+      "count": 187,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-03",
+      "count": 327,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-04",
+      "count": 289,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-05",
+      "count": 296,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-06",
+      "count": 308,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-07",
+      "count": 367,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-08",
+      "count": 316,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-09",
+      "count": 307,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-10",
+      "count": 275,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-11",
+      "count": 240,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2015-12",
+      "count": 170,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-01",
+      "count": 192,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-02",
+      "count": 214,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-03",
+      "count": 289,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-04",
+      "count": 284,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-05",
+      "count": 342,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-06",
+      "count": 347,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-07",
+      "count": 303,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-08",
+      "count": 320,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-09",
+      "count": 334,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-10",
+      "count": 294,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-11",
+      "count": 286,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2016-12",
+      "count": 244,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-01",
+      "count": 336,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-02",
+      "count": 331,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-03",
+      "count": 307,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-04",
+      "count": 406,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-05",
+      "count": 397,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-06",
+      "count": 441,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-07",
+      "count": 519,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-08",
+      "count": 456,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-09",
+      "count": 418,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-10",
+      "count": 389,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-11",
+      "count": 335,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2017-12",
+      "count": 347,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-01",
+      "count": 410,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-02",
+      "count": 306,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-03",
+      "count": 393,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-04",
+      "count": 399,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-05",
+      "count": 541,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-06",
+      "count": 497,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-07",
+      "count": 547,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-08",
+      "count": 561,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-09",
+      "count": 486,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-10",
+      "count": 451,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-11",
+      "count": 405,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2018-12",
+      "count": 448,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-01",
+      "count": 447,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-02",
+      "count": 377,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-03",
+      "count": 496,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-04",
+      "count": 522,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-05",
+      "count": 614,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-06",
+      "count": 567,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-07",
+      "count": 674,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-08",
+      "count": 651,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-09",
+      "count": 550,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-10",
+      "count": 481,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-11",
+      "count": 455,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2019-12",
+      "count": 504,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-01",
+      "count": 490,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-02",
+      "count": 461,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-03",
+      "count": 464,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-04",
+      "count": 474,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-05",
+      "count": 792,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-06",
+      "count": 781,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-07",
+      "count": 803,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-08",
+      "count": 978,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-09",
+      "count": 831,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-10",
+      "count": 803,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-11",
+      "count": 777,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2020-12",
+      "count": 763,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-01",
+      "count": 704,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-02",
+      "count": 466,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-03",
+      "count": 761,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-04",
+      "count": 779,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-05",
+      "count": 863,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-06",
+      "count": 905,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-07",
+      "count": 831,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-08",
+      "count": 792,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-09",
+      "count": 805,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-10",
+      "count": 733,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-11",
+      "count": 690,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2021-12",
+      "count": 614,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-01",
+      "count": 539,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-02",
+      "count": 577,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-03",
+      "count": 686,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-04",
+      "count": 731,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-05",
+      "count": 949,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-06",
+      "count": 859,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-07",
+      "count": 887,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-08",
+      "count": 832,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-09",
+      "count": 776,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-10",
+      "count": 732,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-11",
+      "count": 597,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2022-12",
+      "count": 545,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-01",
+      "count": 743,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-02",
+      "count": 646,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-03",
+      "count": 632,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-04",
+      "count": 688,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-05",
+      "count": 819,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-06",
+      "count": 789,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-07",
+      "count": 879,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-08",
+      "count": 803,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-09",
+      "count": 723,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-10",
+      "count": 680,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-11",
+      "count": 654,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2023-12",
+      "count": 538,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-01",
+      "count": 614,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-02",
+      "count": 639,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-03",
+      "count": 657,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-04",
+      "count": 664,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-05",
+      "count": 672,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-06",
+      "count": 764,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-07",
+      "count": 887,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-08",
+      "count": 760,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-09",
+      "count": 723,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-10",
+      "count": 557,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-11",
+      "count": 403,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2024-12",
+      "count": 482,
+      "crime_type": "Weapons Violation"
+    },
+    {
+      "Month_Year": "2014-01",
+      "count": 2222,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-02",
+      "count": 2353,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-03",
+      "count": 2635,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-04",
+      "count": 2617,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-05",
+      "count": 2623,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-06",
+      "count": 2434,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-07",
+      "count": 2747,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-08",
+      "count": 2616,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-09",
+      "count": 2356,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-10",
+      "count": 2363,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-11",
+      "count": 2112,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-12",
+      "count": 1828,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-01",
+      "count": 2251,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-02",
+      "count": 1881,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-03",
+      "count": 2346,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-04",
+      "count": 1862,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-05",
+      "count": 1747,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-06",
+      "count": 1619,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-07",
+      "count": 1697,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-08",
+      "count": 1851,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-09",
+      "count": 1787,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-10",
+      "count": 1837,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-11",
+      "count": 1602,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2015-12",
+      "count": 1127,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-01",
+      "count": 1142,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-02",
+      "count": 1296,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-03",
+      "count": 1468,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-04",
+      "count": 1446,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-05",
+      "count": 1393,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-06",
+      "count": 1272,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-07",
+      "count": 1241,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-08",
+      "count": 857,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-09",
+      "count": 889,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-10",
+      "count": 760,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-11",
+      "count": 775,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2016-12",
+      "count": 718,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-01",
+      "count": 978,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-02",
+      "count": 954,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-03",
+      "count": 1124,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-04",
+      "count": 1041,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-05",
+      "count": 1113,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-06",
+      "count": 862,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-07",
+      "count": 1000,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-08",
+      "count": 991,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-09",
+      "count": 1022,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-10",
+      "count": 829,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-11",
+      "count": 865,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2017-12",
+      "count": 696,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-01",
+      "count": 1076,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-02",
+      "count": 993,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-03",
+      "count": 1276,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-04",
+      "count": 1096,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-05",
+      "count": 1161,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-06",
+      "count": 1059,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-07",
+      "count": 1091,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-08",
+      "count": 1083,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-09",
+      "count": 998,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-10",
+      "count": 949,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-11",
+      "count": 1081,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2018-12",
+      "count": 934,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-01",
+      "count": 1340,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-02",
+      "count": 1270,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-03",
+      "count": 1406,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-04",
+      "count": 1291,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-05",
+      "count": 1199,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-06",
+      "count": 1229,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-07",
+      "count": 1281,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-08",
+      "count": 1439,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-09",
+      "count": 1200,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-10",
+      "count": 1178,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-11",
+      "count": 1108,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2019-12",
+      "count": 1055,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-01",
+      "count": 1291,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-02",
+      "count": 1173,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-03",
+      "count": 740,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-04",
+      "count": 177,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-05",
+      "count": 477,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-06",
+      "count": 335,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-07",
+      "count": 471,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-08",
+      "count": 515,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-09",
+      "count": 508,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-10",
+      "count": 599,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-11",
+      "count": 485,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2020-12",
+      "count": 497,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-01",
+      "count": 489,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-02",
+      "count": 502,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-03",
+      "count": 580,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-04",
+      "count": 382,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-05",
+      "count": 410,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-06",
+      "count": 334,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-07",
+      "count": 223,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-08",
+      "count": 189,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-09",
+      "count": 227,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-10",
+      "count": 279,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-11",
+      "count": 260,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2021-12",
+      "count": 216,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-01",
+      "count": 227,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-02",
+      "count": 433,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-03",
+      "count": 432,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-04",
+      "count": 410,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-05",
+      "count": 358,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-06",
+      "count": 297,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-07",
+      "count": 287,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-08",
+      "count": 326,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-09",
+      "count": 300,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-10",
+      "count": 316,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-11",
+      "count": 322,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2022-12",
+      "count": 329,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-01",
+      "count": 509,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-02",
+      "count": 520,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-03",
+      "count": 428,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-04",
+      "count": 341,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-05",
+      "count": 343,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-06",
+      "count": 401,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-07",
+      "count": 428,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-08",
+      "count": 469,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-09",
+      "count": 406,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-10",
+      "count": 451,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-11",
+      "count": 492,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2023-12",
+      "count": 431,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-01",
+      "count": 538,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-02",
+      "count": 559,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-03",
+      "count": 549,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-04",
+      "count": 436,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-05",
+      "count": 415,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-06",
+      "count": 443,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-07",
+      "count": 534,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-08",
+      "count": 442,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-09",
+      "count": 427,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-10",
+      "count": 508,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-11",
+      "count": 573,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2024-12",
+      "count": 533,
+      "crime_type": "Narcotics"
+    },
+    {
+      "Month_Year": "2014-01",
+      "count": 5,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-02",
+      "count": 2,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-03",
+      "count": 3,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-04",
+      "count": 3,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-05",
+      "count": 6,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-06",
+      "count": 6,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-07",
+      "count": 8,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-08",
+      "count": 5,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-09",
+      "count": 6,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-10",
+      "count": 2,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-11",
+      "count": 5,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2014-12",
+      "count": 8,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-01",
+      "count": 6,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-02",
+      "count": 7,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-03",
+      "count": 5,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-04",
+      "count": 3,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-05",
+      "count": 4,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-06",
+      "count": 11,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-07",
+      "count": 8,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-08",
+      "count": 4,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-09",
+      "count": 8,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-10",
+      "count": 5,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-11",
+      "count": 9,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2015-12",
+      "count": 8,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-01",
+      "count": 7,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-02",
+      "count": 3,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-03",
+      "count": 9,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-04",
+      "count": 4,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-05",
+      "count": 9,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-06",
+      "count": 7,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-07",
+      "count": 13,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-08",
+      "count": 12,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-09",
+      "count": 7,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-10",
+      "count": 8,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-11",
+      "count": 11,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2016-12",
+      "count": 6,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-01",
+      "count": 15,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-02",
+      "count": 16,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-03",
+      "count": 11,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-04",
+      "count": 22,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-05",
+      "count": 10,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-06",
+      "count": 14,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-07",
+      "count": 16,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-08",
+      "count": 16,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-09",
+      "count": 13,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-10",
+      "count": 7,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-11",
+      "count": 13,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2017-12",
+      "count": 10,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-01",
+      "count": 11,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-02",
+      "count": 20,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-03",
+      "count": 9,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-04",
+      "count": 18,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-05",
+      "count": 17,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-06",
+      "count": 29,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-07",
+      "count": 23,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-08",
+      "count": 25,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-09",
+      "count": 26,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-10",
+      "count": 22,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-11",
+      "count": 33,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2018-12",
+      "count": 29,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-01",
+      "count": 42,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-02",
+      "count": 38,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-03",
+      "count": 52,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-04",
+      "count": 49,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-05",
+      "count": 67,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-06",
+      "count": 49,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-07",
+      "count": 71,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-08",
+      "count": 73,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-09",
+      "count": 69,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-10",
+      "count": 60,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-11",
+      "count": 55,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2019-12",
+      "count": 60,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-01",
+      "count": 83,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-02",
+      "count": 92,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-03",
+      "count": 103,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-04",
+      "count": 58,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-05",
+      "count": 88,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-06",
+      "count": 97,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-07",
+      "count": 113,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-08",
+      "count": 97,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-09",
+      "count": 91,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-10",
+      "count": 96,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-11",
+      "count": 85,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2020-12",
+      "count": 60,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-01",
+      "count": 80,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-02",
+      "count": 93,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-03",
+      "count": 126,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-04",
+      "count": 111,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-05",
+      "count": 126,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-06",
+      "count": 138,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-07",
+      "count": 142,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-08",
+      "count": 140,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-09",
+      "count": 117,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-10",
+      "count": 121,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-11",
+      "count": 106,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2021-12",
+      "count": 105,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-01",
+      "count": 106,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-02",
+      "count": 123,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-03",
+      "count": 114,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-04",
+      "count": 125,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-05",
+      "count": 139,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-06",
+      "count": 131,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-07",
+      "count": 140,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-08",
+      "count": 137,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-09",
+      "count": 125,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-10",
+      "count": 151,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-11",
+      "count": 103,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2022-12",
+      "count": 93,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-01",
+      "count": 125,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-02",
+      "count": 111,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-03",
+      "count": 115,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-04",
+      "count": 119,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-05",
+      "count": 149,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-06",
+      "count": 142,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-07",
+      "count": 165,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-08",
+      "count": 158,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-09",
+      "count": 141,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-10",
+      "count": 144,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-11",
+      "count": 144,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2023-12",
+      "count": 98,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-01",
+      "count": 119,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-02",
+      "count": 126,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-03",
+      "count": 115,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-04",
+      "count": 118,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-05",
+      "count": 128,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-06",
+      "count": 144,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-07",
+      "count": 149,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-08",
+      "count": 177,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-09",
+      "count": 138,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-10",
+      "count": 116,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-11",
+      "count": 123,
+      "crime_type": "Criminal Sexual Assault"
+    },
+    {
+      "Month_Year": "2024-12",
+      "count": 125,
+      "crime_type": "Criminal Sexual Assault"
+    }
+  ]
+}
