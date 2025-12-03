@@ -16,15 +16,54 @@
             padding: 20px;
         }
         #map-chart {
-            width: 800px;
-            height: 800px;
+            width: 700px;
+            height: 700px;
             background: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
-        #monthSelector {
-            margin-bottom: 15px;
-            padding: 6px;
-            font-size: 14px;
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .slider-container {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .slider-container label {
+            min-width: 80px; /* 给 label 留空间显示文本 */
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;          /* 占满剩余宽度 */
+            margin-left: 10px; 
+            height: 12px;
+            background: #ddd;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        /* slider thumb */
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #ff5722;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #333;
+            margin-top: -3px; /* 使 thumb 居中 */
+        }
+
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #ff5722;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #333;
         }
     </style>
 </head>
@@ -33,10 +72,20 @@
 
     <h2>Chicago Police District Crime Map</h2>
 
-    <select id="monthSelector"></select>
+    <div class="slider-row" style="display:flex; align-items:center; margin-bottom:10px;">
+        <div style="flex:1; display:flex; align-items:center; margin-right:10px;">
+            <label for="yearSlider" style="min-width:50px;">Year: <span id="yearLabel"></span></label>
+            <input type="range" id="yearSlider" style="flex:1;">
+        </div>
+        <div style="flex:1; display:flex; align-items:center;">
+            <label for="monthSlider" style="min-width:50px;">Month: <span id="monthLabel"></span></label>
+            <input type="range" id="monthSlider" style="flex:1;">
+        </div>
+    </div>
+
 
     <div id="map-chart"></div>
-
+    
     <script>
 
         // =======================================================
@@ -69,30 +118,71 @@
 
             });
         });
-
+        document.getElementById("yearSlider").addEventListener("input", function() {
+            const y = +this.value;
+            const m = +document.getElementById("monthSlider").value; // 保留原值不变
+            updateMap(y, m);
+        });
+        document.getElementById("monthSlider").addEventListener("input", function() {
+            const m = +this.value; // 保持数字，不要 padStart
+            const y = +document.getElementById("yearSlider").value;
+            updateMap(y, m);
+        });
 
         // =======================================================
         // 3. Your createD3CrimeMap() function (modified for CSV GeoJSON)
         // =======================================================
         async function createD3CrimeMap(mapData, geojsonData) {
 
-            // 1. Parse month list
-            const months = Object.keys(mapData.monthly_data).sort();
-            const monthSelector = document.getElementById("monthSelector");
+            // ---------- 1. Parse year/month ----------
+            const rawMonths = Object.keys(mapData.monthly_data).sort();
 
-            // Fill dropdown
-            months.forEach(m => {
-                const opt = document.createElement("option");
-                opt.value = m;
-                opt.textContent = m;
-                monthSelector.appendChild(opt);
+            // Extract years & months separately
+            const parsed = rawMonths.map(key => {
+                const [year, month] = key.split("-");
+                return {
+                    key: key,
+                    year: year,
+                    month: month
+                };
             });
 
-            let currentMonth = months[0];
+            // Unique years
+            const years = [...new Set(parsed.map(d => d.year))];
 
-            // SVG setup
-            const width = 800;
-            const height = 800;
+             // DOM elements
+            const yearSlider = document.getElementById("yearSlider");
+            const monthSlider = document.getElementById("monthSlider");
+            const yearLabel = document.getElementById("yearLabel");
+            const monthLabel = document.getElementById("monthLabel");
+
+            // Year slider setup
+            yearSlider.min = years[0];
+            yearSlider.max = years[years.length - 1];
+            yearSlider.value = years[0];
+            yearLabel.textContent = yearSlider.value;
+
+            // Month slider setup function
+            function refreshMonthSlider(year) {
+                const months = parsed
+                    .filter(d => d.year === year)
+                    .map(d => +d.month);
+
+                monthSlider.min = 1;
+                monthSlider.max = 12;
+                monthSlider.step = 1;
+                monthSlider.value = months[0];
+
+                monthLabel.textContent = monthSlider.value.padStart(2, "0");
+            }
+            let currentYear = +yearSlider.value;
+            refreshMonthSlider(currentYear);
+            let currentMonth = +monthSlider.value;
+
+
+            // ---------- SVG setup ----------
+            const width = 700;
+            const height = 700;
 
             const container = d3.select("#map-chart");
             container.selectAll("*").remove();
@@ -101,17 +191,14 @@
                 .attr("width", width)
                 .attr("height", height);
 
-            // ---- Abstract projection (same as your CSV version) ----
             const projection = d3.geoIdentity()
                 .reflectY(true)
                 .fitSize([width, height], geojsonData);
 
             const path = d3.geoPath(projection);
 
-            // ----- Color scale -----
             const colorScale = d3.scaleSequential(d3.interpolateOrRd);
 
-            // Tooltip
             const tooltip = d3.select("body")
                 .append("div")
                 .style("position", "absolute")
@@ -122,22 +209,24 @@
                 .style("pointer-events", "none")
                 .style("opacity", 0);
 
-            function updateMap(month) {
-                currentMonth = month;
 
-                const monthData = mapData.monthly_data[month];
+            // ---------- 2. DRAW MAP ----------
+            function updateMap(y, m) {
+                const mm = String(m).padStart(2, "0");
+                const key = `${y}-${mm}`;
 
-                // district → crime count
+                const monthData = mapData.monthly_data[key];
+                if (!monthData) return;
+
                 const crimeByDist = {};
+
                 monthData.forEach(d => {
                     crimeByDist[d.District] = d.total_crimes;
                 });
 
                 const values = Object.values(crimeByDist);
-                const maxCrime = d3.max(values);
-                colorScale.domain([0, maxCrime]);
+                colorScale.domain([0, d3.max(values)]);
 
-                // Draw polygons
                 svg.selectAll("path")
                     .data(geojsonData.features)
                     .join("path")
@@ -152,28 +241,45 @@
                     .on("mouseover", function(event, d) {
                         const dist = d.properties.dist_num;
                         const crime = crimeByDist[dist] || 0;
+
                         tooltip.style("opacity", 1)
-                            .html(`<b>District ${dist}</b><br>Crimes: ${crime}<br>Month: ${currentMonth}`);
+                            .html(
+                                `<b>District ${dist}</b><br>` +
+                                `Crimes: ${crime}<br>` +
+                                `Year: ${y}<br>` +
+                                `Month: ${mm}`
+                            );
+
                         d3.select(this).attr("stroke-width", 2);
                     })
-                    .on("mousemove", function(event) {
+                    .on("mousemove", event => {
                         tooltip.style("left", (event.pageX + 10) + "px")
                             .style("top", (event.pageY - 20) + "px");
                     })
-                    .on("mouseout", () => {
+                    .on("mouseout", function() {
                         tooltip.style("opacity", 0);
-                        d3.select(event.target).attr("stroke-width", 0.5);
+                        d3.select(this).attr("stroke-width", 0.5);
                     });
-
             }
 
-            // First draw
-            updateMap(currentMonth);
+            // initial draw
+            updateMap(currentYear, currentMonth);
 
-            // On dropdown change
-            monthSelector.addEventListener("change", e => {
-                updateMap(e.target.value);
+            // ---------- 3. Event listeners ----------
+            yearSlider.addEventListener("input", () => {
+                currentYear = +yearSlider.value;
+                yearLabel.textContent = currentYear;
+                refreshMonthSlider(currentYear);
+                currentMonth = +monthSlider.value;
+                updateMap(currentYear, currentMonth);
             });
+
+            monthSlider.addEventListener("input", () => {
+                currentMonth = +monthSlider.value;
+                monthLabel.textContent = currentMonth;
+                updateMap(currentYear, currentMonth);
+            });
+
         }
 
     </script>
