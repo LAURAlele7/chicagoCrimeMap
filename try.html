@@ -145,7 +145,7 @@ function createD3CrimeMap(mapData, geojsonData) {
         const months = parsed.filter(d => d.year === year).map(d => +d.month);
         monthSlider.min = 1;
         monthSlider.max = 12;
-        monthSlider.value = months[0];
+        // monthSlider.value = months[0];
         monthLabel.textContent = monthSlider.value;
     }
 
