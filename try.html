@@ -1,349 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Chicago Police District Abstract Crime Map</title>
+<meta charset="UTF-8" />
+<title>Chicago Police District Crime Map</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/wellknown@0.5.0/wellknown.js"></script>
+<style>
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
 
-    <!-- D3 -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+/* ---------- Controls ---------- */
+#controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+    height: 50px; /* 增加高度，露出完整文字 */
+}
+#controls label {
+    min-width: 80px;
+}
+#controls input[type="range"], #controls select {
+    flex: 1;
+    height: 20px; /* 增加高度 */
+}
 
-    <!-- WKT → GeoJSON -->
-    <script src="https://unpkg.com/wellknown@0.5.0/wellknown.js"></script>
+/* ---------- Map ---------- */
+#map-chart {
+    width: 700px;
+    height: 700px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: white;
+    position: relative;
+}
 
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-            display: flex;
-            gap: 30px;
-        }
+/* ---------- Pie charts ---------- */
+#pie-charts {
+    display: flex;
+    flex-direction: column;
+    height: 700px;
+    flex: 1;
+    margin-left: 20px;
+    gap: 20px;
+}
+.pie-canvas {
+    flex: 1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: white;
+}
 
-        /* 左侧：地图 */
-        #map-chart {
-            width: 700px;
-            height: 700px;
-            background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-        }
+/* ---------- Tooltip ---------- */
+.tooltip {
+    position: absolute;
+    padding: 6px 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    pointer-events: none;
+    opacity: 0;
+}
 
-        /* 右侧：两个饼图 */
-        #pie-container {
-            width: 380px;
-        }
-        .pie-box {
-            width: 380px;
-            height: 330px;
-            margin-bottom: 20px;
-        }
+/* ---------- Map Legend ---------- */
+.map-legend {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 12px;
+    background: white;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
-        select {
-            padding: 6px;
-            border: 1px solid #ccc;
-            margin-left: 10px;
-        }
-
-        .slider-row {
-            margin-bottom: 12px;
-        }
-    </style>
+/* ---------- Pie Legend ---------- */
+.pie-legend {
+    font-size: 12px;
+}
+</style>
 </head>
-
 <body>
 
-    <!-- 左侧标题 -->
-    <div>
-        <h2>Chicago Police District Crime Map</h2>
+<h2>Chicago Police District Crime Map</h2>
 
-        <!-- ---------------------- 新增 Arrest Filter ---------------------- -->
-        <div style="margin-bottom:10px; display:flex; align-items:center;">
-            <label>Crime Type Filter:</label>
-            <select id="arrestFilter">
-                <option value="total">Total</option>
-                <option value="arrested">Arrested</option>
-                <option value="unarrested">Unarrested</option>
-            </select>
-        </div>
+<div id="controls">
+    <label for="yearSlider">Year: <span id="yearLabel"></span></label>
+    <input type="range" id="yearSlider">
+    
+    <label for="monthSlider">Month: <span id="monthLabel"></span></label>
+    <input type="range" id="monthSlider">
+    
+    <label for="filterSelect">Filter:</label>
+    <select id="filterSelect">
+        <option value="total">Total</option>
+        <option value="arrested">Arrested</option>
+        <option value="unarrested">Unarrested</option>
+    </select>
+</div>
 
-        <!-- Sliders -->
-        <div class="slider-row" style="display:flex; align-items:center;">
-            <div style="flex:1;">
-                <label>Year: <span id="yearLabel"></span></label>
-                <input type="range" id="yearSlider">
-            </div>
-
-            <div style="flex:1; margin-left:15px;">
-                <label>Month: <span id="monthLabel"></span></label>
-                <input type="range" id="monthSlider">
-            </div>
-        </div>
-
-        <div id="map-chart"></div>
+<div style="display:flex;">
+    <div id="map-chart"></div>
+    <div id="pie-charts">
+        <svg id="domesticPie" class="pie-canvas"></svg>
+        <svg id="crimeTypePie" class="pie-canvas"></svg>
     </div>
-
-    <!-- 右侧：饼图区域 -->
-    <div id="pie-container">
-        <h3>Domestic</h3>
-        <svg id="pie-domestic" class="pie-box"></svg>
-
-        <h3>Crime Type %</h3>
-        <svg id="pie-crimetype" class="pie-box"></svg>
-    </div>
-
+</div>
 
 <script>
-
-// ====================================================================
-//  load police GeoJSON
-// ====================================================================
 d3.csv("PoliceDistrictDec2012_20251203.csv").then(csvData => {
     const features = csvData.map(row => ({
         type: "Feature",
-        properties: {
-            dist_num: +row.DIST_NUM,
-            dist_label: row.DIST_LABEL
-        },
+        properties: { dist_num: +row.DIST_NUM, dist_label: row.DIST_LABEL },
         geometry: wellknown.parse(row.the_geom)
     }));
-
-    const geojsonData = { type: "FeatureCollection", features };
+    const geojsonData = { type: "FeatureCollection", features: features };
 
     d3.json("data_2014_2024/map_pie_data_monthly.json").then(mapData => {
         createD3CrimeMap(mapData, geojsonData);
     });
 });
 
-
-
-// ====================================================================
-// MAIN FUNCTION
-// ====================================================================
 function createD3CrimeMap(mapData, geojsonData) {
-
-    // ------------------------------------------------------------
-    //  Parse months
-    // ------------------------------------------------------------
-    const rawMonths = Object.keys(mapData.monthly_data).sort();
-    const parsed = rawMonths.map(k => {
-        const [y,m] = k.split("-");
-        return { key:k, year:y, month:m };
-    });
-
-    const years = [...new Set(parsed.map(d => d.year))];
-
-    const yearSlider = document.getElementById("yearSlider");
-    const monthSlider = document.getElementById("monthSlider");
-    const yearLabel = document.getElementById("yearLabel");
-    const monthLabel = document.getElementById("monthLabel");
-    const arrestFilter = document.getElementById("arrestFilter");
-
-    yearSlider.min = years[0];
-    yearSlider.max = years[years.length-1];
-    yearSlider.value = years[0];
-    yearLabel.textContent = yearSlider.value;
-
-    function refreshMonthSlider(year){
-        const months = parsed.filter(d => d.year === year).map(d => +d.month);
-        monthSlider.min = 1;
-        monthSlider.max = 12;
-        // monthSlider.value = months[0];
-        monthLabel.textContent = monthSlider.value;
-    }
-
-    refreshMonthSlider(yearSlider.value);
-
-    let currentYear = +yearSlider.value;
-    let currentMonth = +monthSlider.value;
-    let currentDistrict = null;   // <<<新增：地图点击后的 district
-
-    // ------------------------------------------------------------
-    // Draw Map
-    // ------------------------------------------------------------
     const width = 700, height = 700;
-    const svg = d3.select("#map-chart").append("svg")
-        .attr("width", width).attr("height", height);
+    const container = d3.select("#map-chart");
+    container.selectAll("*").remove();
+    const svg = container.append("svg").attr("width", width).attr("height", height);
 
-    const projection = d3.geoIdentity().reflectY(true)
-        .fitSize([width,height], geojsonData);
-
+    const projection = d3.geoIdentity().reflectY(true).fitSize([width,height], geojsonData);
     const path = d3.geoPath(projection);
     const colorScale = d3.scaleSequential(d3.interpolateOrRd);
 
-    // Tooltip
-    const tooltip = d3.select("body").append("div")
-        .style("position","absolute")
-        .style("padding","6px 10px")
-        .style("background","white")
-        .style("border","1px solid #ccc")
-        .style("pointer-events","none")
-        .style("opacity",0);
+    const tooltip = d3.select("body").append("div").attr("class","tooltip");
 
+    let selectedDistrict = null;
+    const yearSlider = document.getElementById("yearSlider");
+    const monthSlider = document.getElementById("monthSlider");
+    const filterSelect = document.getElementById("filterSelect");
+    const yearLabel = document.getElementById("yearLabel");
+    const monthLabel = document.getElementById("monthLabel");
 
-    // ------------------------------------------------------------
-    // PIE CHART SETUP
-    // ------------------------------------------------------------
-    const pieGenerator = d3.pie().value(d => d.value);
-    const arcGenerator = d3.arc().innerRadius(0).outerRadius(150);
+    const rawMonths = Object.keys(mapData.monthly_data).sort();
+    const parsed = rawMonths.map(k=>{const [y,m]=k.split("-"); return {key:k,year:y,month:m};});
+    const years = [...new Set(parsed.map(d=>d.year))];
+    yearSlider.min = years[0]; yearSlider.max = years[years.length-1]; yearSlider.value = years[0]; yearLabel.textContent=yearSlider.value;
+    monthSlider.min = 1; monthSlider.max = 12; monthSlider.step=1; monthSlider.value = 1; monthLabel.textContent=monthSlider.value;
 
-    const pieDomestic = d3.select("#pie-domestic");
-    const pieCrime = d3.select("#pie-crimetype");
-
-    function drawDomesticPie(data){
-        const dataset = [
-            {label:"Domestic", value:data.domestic},
-            {label:"Non-Domestic", value:data.total - data.domestic}
-        ];
-
-        const arcs = pieDomestic.selectAll("path")
-            .data(pieGenerator(dataset));
-
-        arcs.join("path")
-            .attr("transform","translate(180,160)")
-            .attr("d", arcGenerator)
-            .attr("fill",(d,i)=>["#ff7043","#90caf9"][i]);
-    }
-
-    function drawCrimePie(data){
-        const dataset = [
-            {label:"Weapons", value:data.weapons},
-            {label:"Narcotics", value:data.narcotics},
-            {label:"Sexual Assault", value:data.sexual}
-        ];
-
-        const arcs = pieCrime.selectAll("path")
-            .data(pieGenerator(dataset));
-
-        arcs.join("path")
-            .attr("transform","translate(180,160)")
-            .attr("d", arcGenerator)
-            .attr("fill",(d,i)=>["#ef5350","#66bb6a","#42a5f5"][i]);
-    }
-
-
-
-    // ------------------------------------------------------------
-    // Update Pie Charts (City-level or District-level)
-    // ------------------------------------------------------------
-    function updatePies(year, month, district){
-        const key = `${year}-${String(month).padStart(2,"0")}`;
-
-        let src;
-
-        if(district){
-            // district-level
-            src = mapData.monthly_data[key]
-                .find(d => d.District == district);
-
-        } else {
-            // city-level
-            src = mapData.city_level[key];
-        }
-
-        if(!src) return;
-
-        // domestic pie
-        drawDomesticPie({
-            total: src.total_crimes,
-            domestic: src.Domestic ?? Math.round(src.total_crimes * (src.domestic_percentage/100))
-        });
-
-        // crime type pie (filter-aware)
-        const f = arrestFilter.value; // total / arrested / unarrested
-
-        drawCrimePie({
-            weapons: src[`weapons_violation_${f}`] ?? 0,
-            narcotics: src[`narcotics_${f}`] ?? 0,
-            sexual: src[`criminal_sexual_assault_${f}`] ?? 0
-        });
-    }
-
-
-
-    // ------------------------------------------------------------
-    // Update Map
-    // ------------------------------------------------------------
-    function updateMap(year, month){
-        const mm = String(month).padStart(2,"0");
-        const key = `${year}-${mm}`;
-        const monthData = mapData.monthly_data[key];
-        if(!monthData) return;
-
-        const filter = arrestFilter.value; // total/arrested/unarrested
-
+    function updateMap() {
+        const y = yearSlider.value, m = monthSlider.value.toString().padStart(2,"0"), filter = filterSelect.value;
+        monthLabel.textContent = monthSlider.value;
+        const key = `${y}-${m}`;
+        const monthData = mapData.monthly_data[key]; if(!monthData) return;
+        
         const crimeByDist = {};
         monthData.forEach(d => {
-            crimeByDist[d.District] = d[`narcotics_${filter}`] +
-                                       d[`weapons_violation_${filter}`] +
-                                       d[`criminal_sexual_assault_${filter}`];
+            crimeByDist[d.District] = d.total_crimes;
         });
+        const values = Object.values(crimeByDist);
+        colorScale.domain([0,d3.max(values)]);
 
-        const vals = Object.values(crimeByDist);
-        colorScale.domain([0, d3.max(vals)]);
-
-        svg.selectAll("path")
-            .data(geojsonData.features)
-            .join("path")
-            .attr("d", d => path(d))
-            .attr("stroke","#333")
-            .attr("stroke-width", d => (d.properties.dist_num === currentDistrict ? 3 : 0.5))
-            .attr("fill", d => {
-                const dist = d.properties.dist_num;
-                const v = crimeByDist[dist] || 0;
-                // dim others when a district selected
-                return currentDistrict && currentDistrict !== dist
-                       ? d3.interpolateOrRd(colorScale(v)).replace("rgb","rgba").replace(")",",0.3)")
-                       : colorScale(v);
+        svg.selectAll("path").data(geojsonData.features).join("path")
+            .attr("d", d=>path(d))
+            .attr("stroke","#333").attr("stroke-width",0.5)
+            .attr("fill", d=>{
+                const dist=d.properties.dist_num;
+                const crime=crimeByDist[dist]||0;
+                if(selectedDistrict && dist!==selectedDistrict) return "#eee";
+                return colorScale(crime);
             })
-            .style("cursor","pointer")
-            .on("mouseover", function(evt,d){
-                const dist = d.properties.dist_num;
-                const v = crimeByDist[dist] || 0;
-                tooltip.style("opacity",1).html(
-                    `<b>District ${dist}</b><br>
-                     Crimes: ${v}<br>
-                     ${year}-${mm}`
-                );
+            .on("mouseover", function(event,d){
+                const dist=d.properties.dist_num;
+                const crime=crimeByDist[dist]||0;
+                tooltip.style("opacity",1)
+                    .html(`<b>District ${dist}</b><br>Total: ${crime}`);
+                d3.select(this).attr("stroke-width",2);
             })
-            .on("mousemove", evt=>{
-                tooltip.style("left",(evt.pageX+10)+"px")
-                       .style("top",(evt.pageY-20)+"px");
-            })
-            .on("mouseout", ()=> tooltip.style("opacity",0))
-            .on("click", (evt, d)=>{
-                const dist = d.properties.dist_num;
-                currentDistrict = (currentDistrict === dist ? null : dist);
-                updateMap(year, month);
-                updatePies(year, month, currentDistrict);
+            .on("mousemove", event=>{tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");})
+            .on("mouseout", function(){tooltip.style("opacity",0); d3.select(this).attr("stroke-width",0.5);})
+            .on("click", function(event,d){
+                const dist=d.properties.dist_num;
+                selectedDistrict = selectedDistrict===dist? null: dist;
+                updateMap();
+                updatePies();
             });
 
-        updatePies(year, month, currentDistrict);
+        drawMapLegend(svg, width-650, 350, colorScale);
+        updatePies();
     }
 
+    function drawMapLegend(svg, x, y, colorScale){
+        const legendHeight = 200, legendWidth = 20;
+        const legendScale = d3.scaleLinear().domain(colorScale.domain()).range([legendHeight,0]);
+        const legendAxis = d3.axisRight(legendScale).ticks(5);
+        const defs = svg.append("defs");
+        const linearGradient = defs.append("linearGradient").attr("id","mapGradient").attr("x1","0%").attr("y1","100%").attr("x2","0%").attr("y2","0%");
+        linearGradient.selectAll("stop").data(d3.range(0,1.01,0.01)).join("stop")
+            .attr("offset",d=>d).attr("stop-color",d=>colorScale(colorScale.domain()[0]*(1-d)+colorScale.domain()[1]*d));
+        svg.selectAll(".legend").remove();
+        svg.append("g").attr("class","legend").attr("transform",`translate(${x},${y})`)
+            .append("rect").attr("width",legendWidth).attr("height",legendHeight).style("fill","url(#mapGradient)");
+        svg.select(".legend").append("g").attr("transform",`translate(${legendWidth},0)`).call(legendAxis);
+    }
 
-    // ------------------------------------------------------------
-    // Event listeners
-    // ------------------------------------------------------------
-    yearSlider.addEventListener("input", ()=>{
-        currentYear = +yearSlider.value;
-        yearLabel.textContent = currentYear;
-        refreshMonthSlider(currentYear);
-        currentMonth = +monthSlider.value;
-        updateMap(currentYear, currentMonth);
-    });
+    function updatePies(){
+        const y = yearSlider.value, m = monthSlider.value.toString().padStart(2,"0"), filter = filterSelect.value;
+        const key = `${y}-${m}`;
+        let cityData = mapData.city_level[key];
+        if(selectedDistrict){
+            const districtRecords = mapData.district_data[selectedDistrict];
+            cityData = { ...cityData };
+            cityData.total_crimes = districtRecords[0].total_crimes;
+            cityData.arrested_crime_type_percentages = {
+                weapons_violation: districtRecords[0].weapons_violation_arrested_percentage,
+                narcotics: districtRecords[0].narcotics_arrested_percentage,
+                criminal_sexual_assault: districtRecords[0].criminal_sexual_assault_arrested_percentage
+            };
+        }
+        drawPie("#domesticPie", [{label:"Domestic", value:cityData.domestic_percentage},{label:"Non-Domestic", value:100-cityData.domestic_percentage}]);
+        drawPie("#crimeTypePie", Object.entries(cityData.arrested_crime_type_percentages).map(([k,v])=>({label:k.replace("_"," "), value:v})));
+    }
 
-    monthSlider.addEventListener("input", ()=>{
-        currentMonth = +monthSlider.value;
-        monthLabel.textContent = currentMonth;
-        updateMap(currentYear, currentMonth);
-    });
+    function drawPie(selector, data){
+        const svg = d3.select(selector);
+        const width = +svg.attr("width") || svg.node().clientWidth;
+        const height = +svg.attr("height") || svg.node().clientHeight;
+        const radius = Math.min(width,height)/2 -10;
+        svg.selectAll("*").remove();
+        const g = svg.append("g").attr("transform",`translate(${radius + 50},${height/2})`);
+        const pie = d3.pie().sort(null).value(d=>d.value);
+        const arc = d3.arc().innerRadius(radius*0.5).outerRadius(radius);
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+        const arcs = g.selectAll("path").data(pie(data)).join("path")
+            .attr("d", arc)
+            .attr("fill", d=>color(d.data.label))
+            .each(function(d){this._current=d;})
+            .on("mouseover", function(event,d){
+                tooltip.style("opacity",1).html(`${d.data.label}: ${d.data.value.toFixed(2)}%`);
+            })
+            .on("mousemove", event=>{tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");})
+            .on("mouseout", ()=>{tooltip.style("opacity",0);})
+            .transition().duration(1000)
+            .attrTween("d", function(d){
+                const i=d3.interpolate({startAngle:0,endAngle:0},d);
+                return t=>arc(i(t));
+            });
 
-    arrestFilter.addEventListener("change", ()=>{
-        updateMap(currentYear, currentMonth);
-    });
+        // legend
+        const legend = svg.append("g").attr("transform",`translate(${width - 200},10)`);
+        data.forEach((d,i)=>{
+            const gLegend = legend.append("g").attr("transform",`translate(0,${i*20})`);
+            gLegend.append("rect").attr("width",12).attr("height",12).attr("fill",color(d.label));
+            gLegend.append("text").attr("x",18).attr("y",12).text(d.label);
+        });
+    }
 
-    // Initial draw
-    updateMap(currentYear, currentMonth);
+    yearSlider.addEventListener("input", updateMap);
+    monthSlider.addEventListener("input", updateMap);
+    filterSelect.addEventListener("change", updateMap);
+
+    updateMap();
 }
-
 </script>
 
 </body>
