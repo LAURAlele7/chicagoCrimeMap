@@ -66,19 +66,12 @@ body {
 
 /* ---------- Map Legend ---------- */
 .map-legend {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
     font-size: 12px;
-    background: white;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
 /* ---------- Pie Legend ---------- */
 .pie-legend {
-    font-size: 12px;
+    font-size: 16px;
 }
 </style>
 </head>
@@ -131,7 +124,31 @@ function createD3CrimeMap(mapData, geojsonData) {
 
     const projection = d3.geoIdentity().reflectY(true).fitSize([width,height], geojsonData);
     const path = d3.geoPath(projection);
-    const colorScale = d3.scaleSequential(d3.interpolateOrRd);
+    // const colorScale = d3.scaleSequential(d3.interpolateOrRd);
+    // ---- NEW: compute global crime distribution ----
+    const allMonthKeys = Object.keys(mapData.monthly_data);
+    let allCrimes = [];
+
+    // 收集所有月份、所有district的 total_crimes
+    allMonthKeys.forEach(k => {
+        mapData.monthly_data[k].forEach(rec => {
+            if (rec.total_crimes !== undefined && !isNaN(rec.total_crimes)) {
+                allCrimes.push(rec.total_crimes);
+            }
+        });
+    });
+
+    // 排序
+    allCrimes.sort((a, b) => a - b);
+
+    // 95% quantile（排除极端高值）
+    const q95_index = Math.floor(allCrimes.length * 0.95);
+    const globalMaxCrime = allCrimes[q95_index];
+
+    // 固定 color scale 使用 quantile cutoff
+    const colorScale = d3.scaleSequential(d3.interpolateOrRd)
+        .domain([0, globalMaxCrime]);
+
 
     const tooltip = d3.select("body").append("div").attr("class","tooltip");
 
@@ -145,121 +162,259 @@ function createD3CrimeMap(mapData, geojsonData) {
     const rawMonths = Object.keys(mapData.monthly_data).sort();
     const parsed = rawMonths.map(k=>{const [y,m]=k.split("-"); return {key:k,year:y,month:m};});
     const years = [...new Set(parsed.map(d=>d.year))];
-    yearSlider.min = years[0]; yearSlider.max = years[years.length-1]; yearSlider.value = years[0]; yearLabel.textContent=yearSlider.value;
-    monthSlider.min = 1; monthSlider.max = 12; monthSlider.step=1; monthSlider.value = 1; monthLabel.textContent=monthSlider.value;
+    yearSlider.min = years[0]; 
+    yearSlider.max = years[years.length-1]; 
+    yearSlider.value = years[0]; 
+    yearLabel.textContent = yearSlider.value;
 
+    monthSlider.min = 1; 
+    monthSlider.max = 12; 
+    monthSlider.step = 1; 
+    monthSlider.value = 1; 
+    monthLabel.textContent = monthSlider.value;
+
+    const crimeTypes = ["weapons_violation", "narcotics", "criminal_sexual_assault"];
+
+    // ======================== 饼图数据 helper =========================
+    function getCrimeTypePieData(mapData, monthKey, selectedDistrict, filter) {
+        // filter: "total" | "arrested" | "unarrested"
+
+        // ---- CASE 1: city level ----
+        if (!selectedDistrict) {
+            const city = mapData.city_level[monthKey];
+            if (!city) return [];
+
+            let source;
+            if (filter === "total") {
+                source = city.total_crime_type_percentages;
+            } else if (filter === "arrested") {
+                source = city.arrested_crime_type_percentages;
+            } else {
+                source = city.unarrested_crime_type_percentages;
+            }
+
+            return crimeTypes.map(t => ({
+                label: t.replace(/_/g, " "),
+                value: source[t] || 0
+            }));
+        }
+
+        // ---- CASE 2: district level (monthly_data) ----
+        const monthlyList = mapData.monthly_data[monthKey];
+        if (!monthlyList) return [];
+
+        const item = monthlyList.find(d => d.District === selectedDistrict);
+        if (!item) return [];
+
+        return crimeTypes.map(t => {
+            let key = "";
+            if (filter === "total") {
+                key = `${t}_total_percentage`;
+            } else if (filter === "arrested") {
+                key = `${t}_arrested_percentage`;
+            } else {
+                key = `${t}_unarrested_percentage`;
+            }
+
+            return {
+                label: t.replace(/_/g, " "),
+                value: item[key] || 0
+            };
+        });
+    }
+
+    // ======================== Map 更新 =========================
     function updateMap() {
-        const y = yearSlider.value, m = monthSlider.value.toString().padStart(2,"0"), filter = filterSelect.value;
+        const y = yearSlider.value;
+        const m = monthSlider.value.toString().padStart(2,"0");
+        const filter = filterSelect.value;
         monthLabel.textContent = monthSlider.value;
         const key = `${y}-${m}`;
-        const monthData = mapData.monthly_data[key]; if(!monthData) return;
+
+        const monthData = mapData.monthly_data[key]; 
+        if (!monthData) return;
         
-        const crimeByDist = {};
+        const valueByDist = {};
+        const totalByDist = {};
+
         monthData.forEach(d => {
-            crimeByDist[d.District] = d.total_crimes;
+            const dist = d.District;
+            totalByDist[dist] = d.total_crimes;
+            if (filter === "total") {
+                valueByDist[dist] = d.total_crimes;
+            } else if (filter === "arrested") {
+                valueByDist[dist] = d.Arrest;
+            } else {
+                valueByDist[dist] = d.unarrested;
+            }
         });
-        const values = Object.values(crimeByDist);
-        colorScale.domain([0,d3.max(values)]);
 
         svg.selectAll("path").data(geojsonData.features).join("path")
-            .attr("d", d=>path(d))
+            .attr("d", d => path(d))
             .attr("stroke","#333").attr("stroke-width",0.5)
-            .attr("fill", d=>{
-                const dist=d.properties.dist_num;
-                const crime=crimeByDist[dist]||0;
-                if(selectedDistrict && dist!==selectedDistrict) return "#eee";
-                return colorScale(crime);
+            .attr("fill", d => {
+                const dist = d.properties.dist_num;
+                const v = valueByDist[dist] || 0;
+                if (selectedDistrict && dist !== selectedDistrict) return "#eee";
+                return colorScale(v);
             })
             .on("mouseover", function(event,d){
-                const dist=d.properties.dist_num;
-                const crime=crimeByDist[dist]||0;
+                const dist = d.properties.dist_num;
+                const v = valueByDist[dist] || 0;
+                const total = totalByDist[dist] || 0;
                 tooltip.style("opacity",1)
-                    .html(`<b>District ${dist}</b><br>Total: ${crime}`);
+                    .html(`<b>District ${dist}</b><br>Shown (${filter}): ${v}<br>Total: ${total}`);
                 d3.select(this).attr("stroke-width",2);
             })
-            .on("mousemove", event=>{tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");})
-            .on("mouseout", function(){tooltip.style("opacity",0); d3.select(this).attr("stroke-width",0.5);})
+            .on("mousemove", event=>{
+                tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity",0); 
+                d3.select(this).attr("stroke-width",0.5);
+            })
             .on("click", function(event,d){
-                const dist=d.properties.dist_num;
-                selectedDistrict = selectedDistrict===dist? null: dist;
+                const dist = d.properties.dist_num;
+                selectedDistrict = (selectedDistrict === dist ? null : dist);
                 updateMap();
                 updatePies();
             });
 
-        drawMapLegend(svg, width-650, 350, colorScale);
+        drawMapLegend(svg, colorScale);
         updatePies();
     }
 
-    function drawMapLegend(svg, x, y, colorScale){
-        const legendHeight = 200, legendWidth = 20;
-        const legendScale = d3.scaleLinear().domain(colorScale.domain()).range([legendHeight,0]);
+    // ======================== Map Legend（左下角） =========================
+    function drawMapLegend(svg, colorScale){
+        const legendHeight = 250, legendWidth = 20;
+        const legendScale = d3.scaleLinear()
+            .domain(colorScale.domain())
+            .range([legendHeight,0]);
         const legendAxis = d3.axisRight(legendScale).ticks(5);
-        const defs = svg.append("defs");
-        const linearGradient = defs.append("linearGradient").attr("id","mapGradient").attr("x1","0%").attr("y1","100%").attr("x2","0%").attr("y2","0%");
-        linearGradient.selectAll("stop").data(d3.range(0,1.01,0.01)).join("stop")
-            .attr("offset",d=>d).attr("stop-color",d=>colorScale(colorScale.domain()[0]*(1-d)+colorScale.domain()[1]*d));
+
         svg.selectAll(".legend").remove();
-        svg.append("g").attr("class","legend").attr("transform",`translate(${x},${y})`)
-            .append("rect").attr("width",legendWidth).attr("height",legendHeight).style("fill","url(#mapGradient)");
-        svg.select(".legend").append("g").attr("transform",`translate(${legendWidth},0)`).call(legendAxis);
+
+        const defs = svg.select("defs").empty() ? svg.append("defs") : svg.select("defs");
+        const linearGradient = defs.append("linearGradient")
+            .attr("id","mapGradient")
+            .attr("x1","0%").attr("y1","100%")
+            .attr("x2","0%").attr("y2","0%");
+        linearGradient.selectAll("stop")
+            .data(d3.range(0,1.01,0.01))
+            .join("stop")
+            .attr("offset",d=>d)
+            .attr("stop-color",d=>{
+                const [min,max] = colorScale.domain();
+                const v = min*(1-d)+max*d;
+                return colorScale(v);
+            });
+
+        const g = svg.append("g")
+            .attr("class","legend")
+            .attr("transform",`translate(50, 400)`);
+
+        g.append("rect")
+            .attr("width", legendWidth)
+            .attr("height", legendHeight)
+            .style("fill","url(#mapGradient)");
+
+        g.append("g")
+            .attr("transform",`translate(${legendWidth},0)`)
+            .call(legendAxis);
     }
 
+    // ======================== 饼图更新 =========================
     function updatePies(){
-        const y = yearSlider.value, m = monthSlider.value.toString().padStart(2,"0"), filter = filterSelect.value;
+        const y = yearSlider.value;
+        const m = monthSlider.value.toString().padStart(2,"0");
+        const filter = filterSelect.value;
         const key = `${y}-${m}`;
-        let cityData = mapData.city_level[key];
-        if(selectedDistrict){
-            const districtRecords = mapData.district_data[selectedDistrict];
-            cityData = { ...cityData };
-            cityData.total_crimes = districtRecords[0].total_crimes;
-            cityData.arrested_crime_type_percentages = {
-                weapons_violation: districtRecords[0].weapons_violation_arrested_percentage,
-                narcotics: districtRecords[0].narcotics_arrested_percentage,
-                criminal_sexual_assault: districtRecords[0].criminal_sexual_assault_arrested_percentage
-            };
+
+        // --- Domestic pie ---
+        let domesticPerc = 0;
+        if (!selectedDistrict) {
+            const city = mapData.city_level[key];
+            if (!city) return;
+            domesticPerc = city.domestic_percentage || 0;
+        } else {
+            const monthlyList = mapData.monthly_data[key];
+            if (!monthlyList) return;
+            const distItem = monthlyList.find(d => d.District === selectedDistrict);
+            domesticPerc = distItem ? (distItem.domestic_percentage || 0) : 0;
         }
-        drawPie("#domesticPie", [{label:"Domestic", value:cityData.domestic_percentage},{label:"Non-Domestic", value:100-cityData.domestic_percentage}]);
-        drawPie("#crimeTypePie", Object.entries(cityData.arrested_crime_type_percentages).map(([k,v])=>({label:k.replace("_"," "), value:v})));
+
+        const domesticData = [
+            {label:"Domestic", value: domesticPerc},
+            {label:"Non-Domestic", value: Math.max(0, 100 - domesticPerc)}
+        ];
+        drawPie("#domesticPie", domesticData);
+
+        // --- Crime type pie ---
+        const crimePieData = getCrimeTypePieData(mapData, key, selectedDistrict, filter);
+        drawPie("#crimeTypePie", crimePieData);
     }
 
+    // ======================== 画饼图（带动画 + hover + 左侧 legend） =========================
     function drawPie(selector, data){
         const svg = d3.select(selector);
         const width = +svg.attr("width") || svg.node().clientWidth;
         const height = +svg.attr("height") || svg.node().clientHeight;
-        const radius = Math.min(width,height)/2 -10;
+        const radius = Math.min(width,height)/2 - 20;
         svg.selectAll("*").remove();
-        const g = svg.append("g").attr("transform",`translate(${radius + 50},${height/2})`);
+
+        // 饼图整体偏左，给右边 legend 留空间
+        const g = svg.append("g").attr("transform",`translate(${radius + 40},${height/2})`);
         const pie = d3.pie().sort(null).value(d=>d.value);
         const arc = d3.arc().innerRadius(radius*0.5).outerRadius(radius);
         const color = d3.scaleOrdinal(d3.schemeCategory10);
+
         const arcs = g.selectAll("path").data(pie(data)).join("path")
-            .attr("d", arc)
             .attr("fill", d=>color(d.data.label))
-            .each(function(d){this._current=d;})
+            .each(function(d){ this._current = {startAngle:0, endAngle:0}; }) // 初始角度为 0
             .on("mouseover", function(event,d){
-                tooltip.style("opacity",1).html(`${d.data.label}: ${d.data.value.toFixed(2)}%`);
+                tooltip.style("opacity",1)
+                    .html(`${d.data.label}: ${d.data.value.toFixed(2)}%`);
+                d3.select(this).attr("stroke","#fff").attr("stroke-width",2);
             })
-            .on("mousemove", event=>{tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");})
-            .on("mouseout", ()=>{tooltip.style("opacity",0);})
+            .on("mousemove", event=>{
+                tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity",0);
+                d3.select(this).attr("stroke","none");
+            })
             .transition().duration(1000)
             .attrTween("d", function(d){
-                const i=d3.interpolate({startAngle:0,endAngle:0},d);
-                return t=>arc(i(t));
+                const i = d3.interpolate(this._current, d);
+                this._current = i(1);
+                return t => arc(i(t));
             });
 
-        // legend
-        const legend = svg.append("g").attr("transform",`translate(${width - 200},10)`);
+        // legend 靠左上
+        const legend = svg.append("g")
+            .attr("class","pie-legend")
+            .attr("transform","translate(10,20)");
+
         data.forEach((d,i)=>{
-            const gLegend = legend.append("g").attr("transform",`translate(0,${i*20})`);
-            gLegend.append("rect").attr("width",12).attr("height",12).attr("fill",color(d.label));
-            gLegend.append("text").attr("x",18).attr("y",12).text(d.label);
+            const gLegend = legend.append("g").attr("transform",`translate(${width - 225},${i*20})`);
+            gLegend.append("rect")
+                .attr("width",12).attr("height",12)
+                .attr("fill",color(d.label));
+            gLegend.append("text")
+                .attr("x",18).attr("y",12)
+                .text(d.label);
         });
     }
 
-    yearSlider.addEventListener("input", updateMap);
+    // ======================== 事件监听 =========================
+    yearSlider.addEventListener("input", () => {
+        yearLabel.textContent = yearSlider.value;
+        updateMap();
+    });
     monthSlider.addEventListener("input", updateMap);
     filterSelect.addEventListener("change", updateMap);
 
+    // 初次渲染
     updateMap();
 }
 </script>
