@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Chicago Crime Visualization</title>
+<title>Thrive Chicago: A Crime Trend Visualization for Safer Relocation</title>
 
 <!-- Plotly for Trend Charts -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -94,19 +94,19 @@ body {
 
 <h1>Chicago Crime Visualization</h1>
 
-<!-- ███ 1. OVERALL TREND CHART ███ -->
+<!-- 1. OVERALL TREND CHART -->
 <div class="chart-container">
     <h2>Overall Monthly Crime Trend (2014–2024)</h2>
-    <div id="overall-trend-chart" style="height: 400px;"></div>
+    <div id="overall-trend-chart" style="height: 600px;"></div>
 </div>
 
-<!-- ███ 2. CRIME TYPE TREND CHART ███ -->
+<!-- 2. CRIME TYPE TREND CHART -->
 <div class="chart-container">
     <h2>Monthly Crime Type Trends (2014–2024)</h2>
-    <div id="crime-type-trend-chart" style="height: 400px;"></div>
+    <div id="crime-type-trend-chart" style="height: 600px;"></div>
 </div>
 
-<!-- ███ 3. D3 MAP + PIE CHARTS ███ -->
+<!-- 3. D3 MAP + PIE CHARTS -->
 <h2>Chicago Police District Crime Map</h2>
 
 <div id="controls">
@@ -118,7 +118,7 @@ body {
 
     <label>Filter:</label>
     <select id="filterSelect">
-        <option value="total">Total</option>
+        <option value="total">Both</option>
         <option value="arrested">Arrested</option>
         <option value="unarrested">Unarrested</option>
     </select>
@@ -134,9 +134,6 @@ body {
 
 
 <script>
-/* -----------------------------------------------------
-   ███ LOAD TREND CHARTS (FROM FIRST HTML FILE)
------------------------------------------------------ */
 async function loadTrendCharts() {
     const trendData = await d3.json("data_2014_2024/trend_data_monthly.json");
     createOverallTrendChart(trendData);
@@ -183,10 +180,6 @@ function createCrimeTypeTrendChart(data) {
     Plotly.newPlot("crime-type-trend-chart", traces, layout);
 }
 
-
-/* -----------------------------------------------------
-   ███ LOAD D3 MAP + PIE CHARTS (SECOND HTML FILE)
------------------------------------------------------ */
 
 d3.csv("PoliceDistrictDec2012_20251203.csv").then(csvData => {
     const features = csvData.map(row => ({
@@ -273,7 +266,10 @@ function createD3CrimeMap(mapData, geojsonData) {
                 filter === "arrested" ? d.Arrest :
                 d.unarrested;
         });
-
+        filter_value =
+                filter === "total" ? "Both" :
+                filter === "arrested" ? "Arrested" :
+                "Unarrested";
         svg.selectAll("path")
             .data(geojsonData.features)
             .join("path")
@@ -288,7 +284,7 @@ function createD3CrimeMap(mapData, geojsonData) {
             .on("mouseover", function(event, d) {
                 const dist = d.properties.dist_num;
                 tooltip.style("opacity", 1)
-                    .html(`<b>District ${dist}</b><br>${filter}: ${vBy[dist] || 0}<br>Total: ${totalBy[dist] || 0}`);
+                    .html(`<b>District ${dist}</b><br>${filter_value}: ${vBy[dist] || 0}<br>Total Crime: ${totalBy[dist] || 0}`);
             })
             .on("mousemove", event => {
                 tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");
@@ -474,9 +470,6 @@ function createD3CrimeMap(mapData, geojsonData) {
         updateMap();
     }
 
-/* -----------------------------------------------------
-   ███ RUN EVERYTHING
------------------------------------------------------ */
 loadTrendCharts();
 
 </script>
