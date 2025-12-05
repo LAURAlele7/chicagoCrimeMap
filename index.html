@@ -18,7 +18,15 @@ body {
     display: flex;
     flex-direction: column;
 }
-
+h1 {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+p {
+    font-size: 17px; 
+    color:#555; 
+    margin-top:-10px;
+}
 /* Trend Chart Containers */
 .chart-container {
     background: white;
@@ -92,23 +100,34 @@ body {
 
 <body>
 
-<h1>Chicago Crime Visualization</h1>
+<h1>Thrive Chicago: A Crime Trend Visualization for Safer Relocation</h1>
+
+<p style="font-size: 20px; max-width: 1250px; line-height: 1.6; margin-top: 10px;">
+    This interactive dashboard visualizes Chicago crime patterns from 2014 to 2024.
+    Users can explore citywide trends over time, compare crime types, and analyze 
+    neighborhood-level variations through maps and charts. The goal is to make 
+    crime data accessible and help users understand both temporal and spatial 
+    safety patterns.
+</p >
 
 <!-- 1. OVERALL TREND CHART -->
 <div class="chart-container">
     <h2>Overall Monthly Crime Trend (2014–2024)</h2>
+    <p>This chart shows long-term fluctuations and seasonal patterns in Chicago's monthly crime levels, highlighting overall declines after 2020.</p >
     <div id="overall-trend-chart" style="height: 600px;"></div>
 </div>
 
 <!-- 2. CRIME TYPE TREND CHART -->
 <div class="chart-container">
     <h2>Monthly Crime Type Trends (2014–2024)</h2>
+    <p>This chart compares trends across major crime categories, revealing differences in how narcotics, weapon violations, and sexual assault evolve over time.</p>
     <div id="crime-type-trend-chart" style="height: 600px;"></div>
 </div>
 
 <!-- 3. D3 MAP + PIE CHARTS -->
 <h2>Chicago Police District Crime Map</h2>
-
+<p>This map highlights geographic disparities in crime distribution across districts.</p>
+<p>The pie charts show crime-type composition and domestic-related proportions for each selected area.</p>
 <div id="controls">
     <label>Year: <span id="yearLabel"></span></label>
     <input type="range" id="yearSlider">
@@ -174,7 +193,11 @@ function createCrimeTypeTrendChart(data) {
 
     const layout = {
         xaxis: { title: "Month-Year", tickangle: 45 },
-        yaxis: { title: "Crime Count" }
+        yaxis: { title: "Crime Count" },
+        legend: {
+            font: { size: 16 }, 
+            orientation: "v"
+        }
     };
 
     Plotly.newPlot("crime-type-trend-chart", traces, layout);
