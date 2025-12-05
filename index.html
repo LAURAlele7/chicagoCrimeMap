@@ -1,231 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicago Crime Map</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        .chart-container {
-            background-color: #fff;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        #overall-trend-chart, #crime-type-trend-chart, #map-chart, .pie-chart {
-            width: 100%;
-            height: 500px;
-        }
-        #pie-charts-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-        .pie-chart {
-            width: 45%; /* Adjust as needed for layout */
-            margin: 10px;
-            height: 400px;
-        }
-    </style>
+<meta charset="UTF-8" />
+<title>Chicago Crime Visualization</title>
+
+<!-- Plotly for Trend Charts -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<!-- D3 + Wellknown -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/wellknown@0.5.0/wellknown.js"></script>
+
+<style>
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Trend Chart Containers */
+.chart-container {
+    background: white;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Controls */
+#controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+    height: 50px;
+}
+
+#controls input[type="range"], #controls select {
+    flex: 1;
+}
+
+/* Map */
+#map-chart {
+    width: 700px;
+    height: 700px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: white;
+    position: relative;
+}
+
+/* Pie Chart Panels */
+#pie-charts {
+    display: flex;
+    flex-direction: column;
+    height: 700px;
+    flex: 1;
+    margin-left: 20px;
+    gap: 20px;
+}
+
+.pie-canvas {
+    flex: 1;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    padding: 6px 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* ---------- Map Legend ---------- */
+.map-legend {
+    font-size: 12px;
+}
+
+/* ---------- Pie Legend ---------- */
+.pie-legend {
+    font-size: 16px;
+}
+
+</style>
 </head>
+
 <body>
-    <h1>Chicago Crime Trend Visualization</h1>
-    <div class="chart-container">
-        <h2>Overall Monthly Crime Trend</h2>
-        <div id="overall-trend-chart"></div>
+
+<h1>Chicago Crime Visualization</h1>
+
+<!-- ███ 1. OVERALL TREND CHART ███ -->
+<div class="chart-container">
+    <h2>Overall Monthly Crime Trend (2014–2024)</h2>
+    <div id="overall-trend-chart" style="height: 400px;"></div>
+</div>
+
+<!-- ███ 2. CRIME TYPE TREND CHART ███ -->
+<div class="chart-container">
+    <h2>Monthly Crime Type Trends (2014–2024)</h2>
+    <div id="crime-type-trend-chart" style="height: 400px;"></div>
+</div>
+
+<!-- ███ 3. D3 MAP + PIE CHARTS ███ -->
+<h2>Chicago Police District Crime Map</h2>
+
+<div id="controls">
+    <label>Year: <span id="yearLabel"></span></label>
+    <input type="range" id="yearSlider">
+
+    <label>Month: <span id="monthLabel"></span></label>
+    <input type="range" id="monthSlider">
+
+    <label>Filter:</label>
+    <select id="filterSelect">
+        <option value="total">Total</option>
+        <option value="arrested">Arrested</option>
+        <option value="unarrested">Unarrested</option>
+    </select>
+</div>
+
+<div style="display:flex;">
+    <div id="map-chart"></div>
+    <div id="pie-charts">
+        <svg id="crimeTypePie" class="pie-canvas"></svg>
+        <svg id="domesticPie" class="pie-canvas"></svg>
     </div>
-    <div class="chart-container">
-        <h2>Monthly Crime Type Trends</h2>
-        <div id="crime-type-trend-chart"></div>
-    </div>
-    <div class="chart-container">
-        <h2>Crime Distribution by District</h2>
-        <select id="monthSelector" style="margin-bottom: 15px; padding: 5px; font-size: 16px;"></select>
-        <div id="map-chart"></div>
-    </div>
-    <div class="chart-container">
-        <h2>Crime Composition by District</h2>
-        <div id="pie-charts-container"></div>
-    </div>
+</div>
 
-    <script>
-        async function fetchData(filePath) {
-            const response = await fetch(filePath);
-            return response.json();
-        }
 
-        // Overall Crime Trend
-        function createOverallTrendChart(data) {
-            const overallTrendData = data.monthly_totals;
-            const overallTrace = {
-                x: overallTrendData.map(d => d.Month_Year),
-                y: overallTrendData.map(d => d.total_crimes),
-                mode: 'lines+markers',
-                name: 'Total Crimes'
-            };
+<script>
+/* -----------------------------------------------------
+   ███ LOAD TREND CHARTS (FROM FIRST HTML FILE)
+----------------------------------------------------- */
+async function loadTrendCharts() {
+    const trendData = await d3.json("data_2014_2024/trend_data_monthly.json");
+    createOverallTrendChart(trendData);
+    createCrimeTypeTrendChart(trendData);
+}
 
-            const overallLayout = {
-                title: 'Overall Monthly Crime Trend (2014-2024)',
-                xaxis: {
-                    title: 'Month-Year',
-                    tickangle: 45
-                },
-                yaxis: {
-                    title: 'Total Crimes'
-                }
-            };
-            Plotly.newPlot('overall-trend-chart', [overallTrace], overallLayout);
-        }
+function createOverallTrendChart(data) {
+    const monthly = data.monthly_totals;
 
-        // Crime Type Trend
-        function createCrimeTypeTrendChart(data) {
-            const crimeTypeTrendData = data.crime_type_trends;
-            const crimeTypes = [...new Set(crimeTypeTrendData.map(d => d.crime_type))];
+    const trace = {
+        x: monthly.map(d => d.Month_Year),
+        y: monthly.map(d => d.total_crimes),
+        mode: "lines+markers",
+        name: "Total Crimes"
+    };
 
-            const crimeTypeTraces = crimeTypes.map(type => {
-                const filteredData = crimeTypeTrendData.filter(d => d.crime_type === type);
-                return {
-                    x: filteredData.map(d => d.Month_Year),
-                    y: filteredData.map(d => d.count),
-                    mode: 'lines+markers',
-                    name: type
-                };
+    const layout = {
+        xaxis: { title: "Month-Year", tickangle: 45 },
+        yaxis: { title: "Total Crimes" }
+    };
+
+    Plotly.newPlot("overall-trend-chart", [trace], layout);
+}
+
+function createCrimeTypeTrendChart(data) {
+    const raw = data.crime_type_trends;
+    const types = [...new Set(raw.map(d => d.crime_type))];
+
+    const traces = types.map(type => {
+        const filtered = raw.filter(d => d.crime_type === type);
+        return {
+            x: filtered.map(d => d.Month_Year),
+            y: filtered.map(d => d.count),
+            mode: "lines+markers",
+            name: type
+        };
+    });
+
+    const layout = {
+        xaxis: { title: "Month-Year", tickangle: 45 },
+        yaxis: { title: "Crime Count" }
+    };
+
+    Plotly.newPlot("crime-type-trend-chart", traces, layout);
+}
+
+
+/* -----------------------------------------------------
+   ███ LOAD D3 MAP + PIE CHARTS (SECOND HTML FILE)
+----------------------------------------------------- */
+
+d3.csv("PoliceDistrictDec2012_20251203.csv").then(csvData => {
+    const features = csvData.map(row => ({
+        type: "Feature",
+        properties: { dist_num: +row.DIST_NUM, dist_label: row.DIST_LABEL },
+        geometry: wellknown.parse(row.the_geom)
+    }));
+
+    const geojsonData = { type: "FeatureCollection", features };
+
+    d3.json("data_2014_2024/map_pie_data_monthly.json").then(mapData => {
+        createD3CrimeMap(mapData, geojsonData);
+    });
+});
+
+function createD3CrimeMap(mapData, geojsonData) {
+    const width = 700, height = 700;
+    const container = d3.select("#map-chart");
+    container.selectAll("*").remove();
+    const svg = container.append("svg").attr("width", width).attr("height", height);
+
+    const projection = d3.geoIdentity().reflectY(true).fitSize([width,height], geojsonData);
+    const path = d3.geoPath(projection);
+
+    const allMonthKeys = Object.keys(mapData.monthly_data);
+    let allCrimes = [];
+    allMonthKeys.forEach(k => {
+        mapData.monthly_data[k].forEach(rec => {
+            if (!isNaN(rec.total_crimes)) allCrimes.push(rec.total_crimes);
+        });
+    });
+
+    allCrimes.sort((a,b)=>a-b);
+    const q95 = allCrimes[Math.floor(allCrimes.length * 0.95)];
+
+    const colorScale = d3.scaleSequential(d3.interpolateOrRd)
+        .domain([0, q95]);
+
+    const tooltip = d3.select("body").append("div").attr("class","tooltip");
+
+    let selectedDistrict = null;
+
+    const yearSlider = document.getElementById("yearSlider");
+    const monthSlider = document.getElementById("monthSlider");
+    const filterSelect = document.getElementById("filterSelect");
+    const yearLabel = document.getElementById("yearLabel");
+    const monthLabel = document.getElementById("monthLabel");
+
+    const rawMonths = Object.keys(mapData.monthly_data).sort();
+    const parsed = rawMonths.map(k => {
+        const [y,m] = k.split("-");
+        return { key:k, year:+y, month:+m };
+    });
+
+    const years = [...new Set(parsed.map(d => d.year))];
+
+    yearSlider.min = years[0];
+    yearSlider.max = years[years.length-1];
+    yearSlider.value = years[0];
+    yearLabel.textContent = yearSlider.value;
+
+    monthSlider.min = 1;
+    monthSlider.max = 12;
+    monthSlider.value = 1;
+    monthLabel.textContent = 1;
+    monthLabel.textContent = monthSlider.value;
+
+    // FULL MAP RENDERING...
+    function updateMap() {
+        const y = +yearSlider.value;
+        const m = monthSlider.value.toString().padStart(2,"0");
+        const key = `${y}-${m}`;
+        monthLabel.textContent = monthSlider.value;
+        const filter = filterSelect.value;
+
+        const monthData = mapData.monthly_data[key] || [];
+        if (!monthData) return;
+        const vBy = {};
+        const totalBy = {};
+        monthData.forEach(d => {
+            totalBy[d.District] = d.total_crimes;
+            vBy[d.District] =
+                filter === "total" ? d.total_crimes :
+                filter === "arrested" ? d.Arrest :
+                d.unarrested;
+        });
+
+        svg.selectAll("path")
+            .data(geojsonData.features)
+            .join("path")
+            .attr("d", path)
+            .attr("stroke", "#333")
+            .attr("stroke-width", 0.5)
+            .attr("fill", d => {
+                const dist = d.properties.dist_num;
+                if (selectedDistrict && dist !== selectedDistrict) return "#eee";
+                return colorScale(vBy[dist] || 0);
+            })
+            .on("mouseover", function(event, d) {
+                const dist = d.properties.dist_num;
+                tooltip.style("opacity", 1)
+                    .html(`<b>District ${dist}</b><br>${filter}: ${vBy[dist] || 0}<br>Total: ${totalBy[dist] || 0}`);
+            })
+            .on("mousemove", event => {
+                tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");
+            })
+            .on("mouseout", () => tooltip.style("opacity",0))
+            .on("click", (event, d) => {
+                const dist = d.properties.dist_num;
+                selectedDistrict = (selectedDistrict === dist ? null : dist);
+                updateMap();
+                updatePies();
+            });
+        drawMapLegend(svg, colorScale);
+        updatePies();
+    }
+
+    function drawMapLegend(svg, colorScale){
+        const legendHeight = 250, legendWidth = 20;
+        const legendScale = d3.scaleLinear()
+            .domain(colorScale.domain())
+            .range([legendHeight,0]);
+        const legendAxis = d3.axisRight(legendScale).ticks(5);
+
+        svg.selectAll(".legend").remove();
+
+        const defs = svg.select("defs").empty() ? svg.append("defs") : svg.select("defs");
+        const linearGradient = defs.append("linearGradient")
+            .attr("id","mapGradient")
+            .attr("x1","0%").attr("y1","100%")
+            .attr("x2","0%").attr("y2","0%");
+        linearGradient.selectAll("stop")
+            .data(d3.range(0,1.01,0.01))
+            .join("stop")
+            .attr("offset",d=>d)
+            .attr("stop-color",d=>{
+                const [min,max] = colorScale.domain();
+                const v = min*(1-d)+max*d;
+                return colorScale(v);
             });
 
-            const crimeTypeLayout = {
-                title: 'Monthly Crime Type Trends (2014-2024)',
-                xaxis: {
-                    title: 'Month-Year',
-                    tickangle: 45
-                },
-                yaxis: {
-                    title: 'Number of Crimes'
-                }
-            };
-            Plotly.newPlot('crime-type-trend-chart', crimeTypeTraces, crimeTypeLayout);
+        const g = svg.append("g")
+            .attr("class","legend")
+            .attr("transform",`translate(50, 400)`);
+
+        g.append("rect")
+            .attr("width", legendWidth)
+            .attr("height", legendHeight)
+            .style("fill","url(#mapGradient)");
+
+        g.append("g")
+            .attr("transform",`translate(${legendWidth},0)`)
+            .call(legendAxis);
+    }
+
+    function updatePies() {
+        const y = +yearSlider.value;
+        const m = monthSlider.value.toString().padStart(2,"0");
+        const key = `${y}-${m}`;
+        const filter = filterSelect.value;
+
+        const crimePie = getCrimeTypePieData(mapData, key, selectedDistrict, filter);
+
+        drawPie("#crimeTypePie", crimePie);
+
+        let domesticPct = 0;
+        if (!selectedDistrict) {
+            domesticPct = mapData.city_level[key]?.domestic_percentage || 0;
+        } else {
+            const item = mapData.monthly_data[key]?.find(d => d.District === selectedDistrict);
+            domesticPct = item?.domestic_percentage || 0;
         }
 
-        // Choropleth Map (placeholder for now)
-        function createMapChart(mapData, geojsonData) {
-            const latestMonthData = {};
-            mapData.district_monthly.forEach(d => {
-                if (!latestMonthData[d.District] || d.Month_Year > latestMonthData[d.District].Month_Year) {
-                    latestMonthData[d.District] = d;
-                }
+        drawPie("#domesticPie", [
+            {label: "Domestic", value: domesticPct},
+            {label: "Non-Domestic", value: 100 - domesticPct}
+        ]);
+    }
+
+    const crimeTypes = ["weapons_violation", "narcotics", "criminal_sexual_assault"];
+    function getCrimeTypePieData(mapData, key, dist, filter) {
+        if (!dist) {
+            const city = mapData.city_level[key];
+            if (!city) return [];
+            const source =
+                filter === "total" ? city.total_crime_type_percentages :
+                filter === "arrested" ? city.arrested_crime_type_percentages :
+                city.unarrested_crime_type_percentages;
+
+            return crimeTypes.map(t => ({label: t.replace(/_/g," "), value: source[t] || 0}));
+        }
+
+        const item = mapData.monthly_data[key]?.find(d => d.District === dist);
+        if (!item) return [];
+
+        return crimeTypes.map(t => ({
+            label: t.replace(/_/g," "),
+            value:
+                filter === "total" ? item[`${t}_total_percentage`] :
+                filter === "arrested" ? item[`${t}_arrested_percentage`] :
+                item[`${t}_unarrested_percentage`]
+        }));
+    }
+
+    function drawPie(selector, data) {
+        const svg = d3.select(selector);
+        const width = svg.node().clientWidth;
+        const height = svg.node().clientHeight;
+        const radius = Math.min(width, height) / 2 - 20;
+
+        svg.selectAll("*").remove();
+
+        // Pie 图主组（稍微靠左，给 legend 留位置）
+        const g = svg.append("g")
+            .attr("transform", `translate(${radius + 40}, ${height / 2})`);
+
+        const pie = d3.pie().sort(null).value(d => d.value);
+        const arc = d3.arc().innerRadius(radius * 0.5).outerRadius(radius);
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+        const arcs = g.selectAll("path").data(pie(data)).join("path")
+            .attr("fill", d=>color(d.data.label))
+            .each(function(d){ this._current = {startAngle:0, endAngle:0}; }) // 初始角度为 0
+            .on("mouseover", function(event,d){
+                tooltip.style("opacity",1)
+                    .html(`${d.data.label}: ${d.data.value.toFixed(2)}%`);
+                d3.select(this).attr("stroke","#fff").attr("stroke-width",2);
+            })
+            .on("mousemove", event=>{
+                tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity",0);
+                d3.select(this).attr("stroke","none");
+            })
+            .transition().duration(1000)
+            .attrTween("d", function(d){
+                const i = d3.interpolate(this._current, d);
+                this._current = i(1);
+                return t => arc(i(t));
             });
 
-            const districts = Object.values(latestMonthData).map(d => d.District);
-            const totalCrimes = Object.values(latestMonthData).map(d => d.total_crimes);
-
-            const mapTrace = {
-                type: 'choropleth', // Changed back to 'choropleth'
-                locationmode: 'geojson-id',
-                locations: districts,
-                geojson: geojsonData, // Re-enabled
-                featureidkey: 'properties.dist_num', // Corrected key
-                z: totalCrimes,
-                colorscale: 'Hot',
-                colorbar: {
-                    title: 'Total Crimes'
-                },
-                hoverinfo: 'location+z',
-                marker: {
-                    line: {
-                        color: 'rgb(180,180,180)',
-                        width: 1
-                    }
-                }
-            };
-
-            const mapLayout = {
-                title: 'Crime Distribution by District',
-                geo: {
-                    scope: 'usa',
-                    showland: true,
-                    landcolor: 'rgb(217, 217, 217)',
-                    subunitwidth: 1,
-                    countrywidth: 1,
-                    subunitcolor: 'rgb(255,255,255)',
-                    countrycolor: 'rgb(255,255,255)'
-                }
-            };
-            Plotly.newPlot('map-chart', [mapTrace], mapLayout);
-        }
-
-        // Pie Charts for District Composition
-        function createPieCharts(mapData) {
-            const pieChartsContainer = document.getElementById('pie-charts-container');
-            const districtsData = {}; // Aggregate data for each district
-
-            mapData.district_monthly.forEach(d => {
-                if (!districtsData[d.District]) {
-                    districtsData[d.District] = {
-                        weapons_violation_count: 0,
-                        narcotics_count: 0,
-                        criminal_sexual_assault_count: 0,
-                        total_crimes: 0
-                    };
-                }
-                districtsData[d.District].weapons_violation_count += d.weapons_violation_count;
-                districtsData[d.District].narcotics_count += d.narcotics_count;
-                districtsData[d.District].criminal_sexual_assault_count += d.criminal_sexual_assault_count;
-                districtsData[d.District].total_crimes += d.total_crimes;
+        // 绘制 Pie
+        g.selectAll("path")
+            .data(pie(data))
+            .enter()
+            .append("path")
+            .attr("fill", d => color(d.data.label))
+            .each(function(d) { this._current = d; })
+            .transition()
+            .duration(800)
+            .attrTween("d", function(d) {
+                const i = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+                return t => arc(i(t));
             });
 
-            for (const district in districtsData) {
-                const districtData = districtsData[district];
-                const div = document.createElement('div');
-                div.className = 'pie-chart';
-                div.id = `pie-chart-${district}`;
-                pieChartsContainer.appendChild(div);
+        // ---------- 绘制 Legend ----------
+        const legend = svg.append("g")
+            .attr("transform", `translate(${width - 200}, 20)`);
 
-                const labels = ['Weapons Violation', 'Narcotics', 'Criminal Sexual Assault'];
-                const values = [
-                    districtData.weapons_violation_count,
-                    districtData.narcotics_count,
-                    districtData.criminal_sexual_assault_count
-                ];
+        data.forEach((d, i) => {
+            const gLegend = legend.append("g")
+                .attr("transform", `translate(0, ${i * 20})`);
 
-                const pieTrace = {
-                    type: 'pie',
-                    labels: labels,
-                    values: values,
-                    hoverinfo: 'label+percent',
-                    textinfo: 'percent',
-                    insidetextorientation: 'radial'
-                };
+            gLegend.append("rect")
+                .attr("width", 12)
+                .attr("height", 12)
+                .attr("fill", color(d.label));
 
-                const pieLayout = {
-                    title: `Crime Composition - District ${district}`
-                };
+            gLegend.append("text")
+                .attr("x", 18)
+                .attr("y", 10)
+                .style("font-size", "16px")
+                .text(d.label);
+        });
+    }
 
-                Plotly.newPlot(div, [pieTrace], pieLayout);
-            }
-        }
 
-        async function init() {
-            const trendData = await fetchData('data_2014_2024/trend_data_monthly.json');
-            const mapPieData = await fetchData('data_2014_2024/map_pie_data_monthly.json');
-            const chicagoDistrictsGeoJSON = await fetchData('PoliceDistrictDec2012_20251203.geojson');
+        yearSlider.addEventListener("input", () => {
+            yearLabel.textContent = yearSlider.value;
+            updateMap();
+        });
+        monthSlider.addEventListener("input", updateMap);
+        filterSelect.addEventListener("change", updateMap);
 
-            createOverallTrendChart(trendData);
-            createCrimeTypeTrendChart(trendData);
-            createMapChart(mapPieData, chicagoDistrictsGeoJSON);
-            createPieCharts(mapPieData);
-        }
+        updateMap();
+    }
 
-        init();
-    </script>
+/* -----------------------------------------------------
+   ███ RUN EVERYTHING
+----------------------------------------------------- */
+loadTrendCharts();
+
+</script>
+
 </body>
 </html>
-
