@@ -116,22 +116,65 @@ def prepare_map_and_pie_data(df):
     
     # 计算百分比
     district_monthly['domestic_percentage'] = (district_monthly['Domestic'] / district_monthly['total_crimes'] * 100).round(2)
-    district_monthly['arrest_percentage'] = (district_monthly['Arrest'] / district_monthly['total_crimes'] * 100).round(2)
-    
-    # 为特定犯罪类型添加计数
+    # 计算 district-level arrested & unarrested 总数
+    district_monthly["unarrested"] = district_monthly["total_crimes"] - district_monthly["Arrest"]
+
+    # 避免除零
+    district_monthly["Arrest"] = district_monthly["Arrest"].replace(0, 0.00001)
+    district_monthly["unarrested"] = district_monthly["unarrested"].replace(0, 0.00001)
+
+    # ========== 三个犯罪类型的详细统计 ==========
     crime_types = ['Weapons Violation', 'Narcotics', 'Criminal Sexual Assault']
-    
+
     for crime_type in crime_types:
-        crime_counts = df[df['Primary Type'] == crime_type].groupby(['District', 'Month_Year']).size().reset_index(name=f'{crime_type.lower().replace(" ", "_")}_count')
-        district_monthly = district_monthly.merge(crime_counts, on=['District', 'Month_Year'], how='left')
-        district_monthly[f'{crime_type.lower().replace(" ", "_")}_count'] = district_monthly[f'{crime_type.lower().replace(" ", "_")}_count'].fillna(0).astype(int)
-    
-    # 计算犯罪类型构成百分比
-    for crime_type in crime_types:
-        col_name = crime_type.lower().replace(" ", "_")
-        district_monthly[f'{col_name}_percentage'] = (district_monthly[f'{col_name}_count'] / district_monthly['total_crimes'] * 100).round(2)
-        # 处理除零情况
-        district_monthly[f'{col_name}_percentage'] = district_monthly[f'{col_name}_percentage'].fillna(0)
+        key = crime_type.lower().replace(" ", "_")
+
+        # total count
+        total_counts = (
+            df[df['Primary Type'] == crime_type]
+            .groupby(['District', 'Month_Year'])
+            .size()
+            .reset_index(name=f"{key}_total")
+        )
+
+        # arrested count
+        arrested_counts = (
+            df[(df['Primary Type'] == crime_type) & (df['Arrest'] == True)]
+            .groupby(['District', 'Month_Year'])
+            .size()
+            .reset_index(name=f"{key}_arrested")
+        )
+
+        # unarrested count
+        unarrested_counts = (
+            df[(df['Primary Type'] == crime_type) & (df['Arrest'] == False)]
+            .groupby(['District', 'Month_Year'])
+            .size()
+            .reset_index(name=f"{key}_unarrested")
+        )
+
+        # 合并
+        district_monthly = district_monthly.merge(total_counts, on=['District', 'Month_Year'], how='left')
+        district_monthly = district_monthly.merge(arrested_counts, on=['District', 'Month_Year'], how='left')
+        district_monthly = district_monthly.merge(unarrested_counts, on=['District', 'Month_Year'], how='left')
+
+        # 填充 0
+        district_monthly[f"{key}_total"] = district_monthly[f"{key}_total"].fillna(0).astype(int)
+        district_monthly[f"{key}_arrested"] = district_monthly[f"{key}_arrested"].fillna(0).astype(int)
+        district_monthly[f"{key}_unarrested"] = district_monthly[f"{key}_unarrested"].fillna(0).astype(int)
+
+        # ========== 百分比（基于 total_crimes）==========
+        district_monthly[f"{key}_total_percentage"] = (
+            district_monthly[f"{key}_total"] / district_monthly["total_crimes"] * 100
+        ).round(2)
+
+        district_monthly[f"{key}_arrested_percentage"] = (
+            district_monthly[f"{key}_arrested"] / district_monthly["Arrest"] * 100
+        ).round(2)
+
+        district_monthly[f"{key}_unarrested_percentage"] = (
+            district_monthly[f"{key}_unarrested"] / district_monthly["unarrested"] * 100
+        ).round(2)
     
     # 准备城市级别的饼图数据（按月）
     city_level_data = prepare_city_level_pie_data(df)
@@ -160,48 +203,75 @@ def prepare_map_and_pie_data(df):
     return map_pie_data
 
 def prepare_city_level_pie_data(df):
-    """准备城市级别的饼图数据（按月）"""
+    """准备城市级别的饼图数据（按月，包含 arrested / unarrested / total crime type）"""
     print("准备城市级别饼图数据...")
-    
+
     city_data = {}
-    
-    # 为每个月准备数据
+    crime_types = ['Weapons Violation', 'Narcotics', 'Criminal Sexual Assault']
     months = sorted(df['Month_Year'].unique())
-    
+
     for month in months:
         month_df = df[df['Month_Year'] == month]
         total_crimes = len(month_df)
-        
         if total_crimes == 0:
             continue
-            
-        # 家庭暴力比例
+
+        # ---------------------
+        # Global totals
+        # ---------------------
+        total_arrested = month_df['Arrest'].sum()
+        total_unarrested = total_crimes - total_arrested
+
+        # Domestic % (whole city)
         domestic_percentage = round(month_df['Domestic'].sum() / total_crimes * 100, 2)
-        
-        # 逮捕比例
-        arrest_percentage = round(month_df['Arrest'].sum() / total_crimes * 100, 2)
-        
-        # 特定犯罪类型比例
-        crime_types = ['Weapons Violation', 'Narcotics', 'Criminal Sexual Assault']
-        crime_type_percentages = {}
-        
+
+        # ---------------------
+        # Crime type stats
+        # ---------------------
+        total_type_pct = {}
+        arrested_type_pct = {}
+        unarrested_type_pct = {}
+
         for crime_type in crime_types:
-            count = len(month_df[month_df['Primary Type'] == crime_type])
-            percentage = round(count / total_crimes * 100, 2)
-            crime_type_percentages[crime_type.lower().replace(" ", "_")] = percentage
-        
-        # 其他犯罪类型比例
-        other_crimes = total_crimes - sum([len(month_df[month_df['Primary Type'] == crime_type]) for crime_type in crime_types])
-        other_percentage = round(other_crimes / total_crimes * 100, 2)
-        crime_type_percentages['other'] = other_percentage
-        
+            key = crime_type.lower().replace(" ", "_")
+
+            # Total
+            type_total = len(month_df[month_df['Primary Type'] == crime_type])
+
+            # Arrested
+            type_arrested = len(
+                month_df[(month_df['Primary Type'] == crime_type) & (month_df['Arrest'] == True)]
+            )
+
+            # Unarrested
+            type_unarrested = len(
+                month_df[(month_df['Primary Type'] == crime_type) & (month_df['Arrest'] == False)]
+            )
+
+            # =============== Percentages ===============
+            total_type_pct[key] = round(type_total / total_crimes * 100, 2)
+
+            arrested_type_pct[key] = (
+                round(type_arrested / total_arrested * 100, 2) if total_arrested > 0 else 0.0
+            )
+
+            unarrested_type_pct[key] = (
+                round(type_unarrested / total_unarrested * 100, 2) if total_unarrested > 0 else 0.0
+            )
+
+        # ---------------------
+        # Store month result
+        # ---------------------
         city_data[month] = {
-            'total_crimes': int(total_crimes),
-            'domestic_percentage': float(domestic_percentage),
-            'arrest_percentage': float(arrest_percentage),
-            'crime_type_percentages': {k: float(v) for k, v in crime_type_percentages.items()}
+            "total_crimes": int(total_crimes),
+            "domestic_percentage": float(domestic_percentage),
+
+            # your new required fields
+            "total_crime_type_percentages": total_type_pct,
+            "arrested_crime_type_percentages": arrested_type_pct,
+            "unarrested_crime_type_percentages": unarrested_type_pct,
         }
-    
+
     return city_data
 
 # 4. 主处理函数
