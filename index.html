@@ -372,13 +372,32 @@ function createD3CrimeMap(mapData, geojsonData) {
         drawPie("#crimeTypePie", crimePie);
 
         let domesticPct = 0;
+        const domesticKey = "domestic"; // 定义 Domestic 的键名
+
         if (!selectedDistrict) {
-            domesticPct = mapData.city_level[key]?.domestic_percentage || 0;
+            const city = mapData.city_level[key];
+            if (city) {
+                const source =
+                    filter === "total" ? city.total_crime_type_percentages :
+                    filter === "arrested" ? city.arrested_crime_type_percentages :
+                    city.unarrested_crime_type_percentages;
+                
+                // 关键：从 city_level 对象的百分比字典中获取 domestic 的百分比
+                domesticPct = source[domesticKey] || 0;
+            }
         } else {
             const item = mapData.monthly_data[key]?.find(d => d.District === selectedDistrict);
-            domesticPct = item?.domestic_percentage || 0;
+            if (item) {
+                // 关键：从 district_monthly 对象的百分比字段中获取 domestic 的百分比
+                domesticPct = 
+                    filter === "total" ? item[`${domesticKey}_total_percentage`] :
+                    filter === "arrested" ? item[`${domesticKey}_arrested_percentage`] :
+                    item[`${domesticKey}_unarrested_percentage`];
+                domesticPct = domesticPct || 0;
+            }
         }
 
+        // 使用新的 domesticPct
         drawPie("#domesticPie", [
             {label: "Domestic", value: domesticPct},
             {label: "Non-Domestic", value: 100 - domesticPct}
@@ -386,6 +405,7 @@ function createD3CrimeMap(mapData, geojsonData) {
     }
 
     const crimeTypes = ["weapons_violation", "narcotics", "criminal_sexual_assault"];
+    const domesticKey = "domestic";
     function getCrimeTypePieData(mapData, key, dist, filter) {
         if (!dist) {
             const city = mapData.city_level[key];
